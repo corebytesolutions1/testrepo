@@ -506,30 +506,37 @@ body {
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     box-shadow: 0 1px 0 var(--border);
+    z-index: 3000 !important; /* ABOVE mobile menu (2000) and backdrop (1999) */
   }
 
   /* ── Mobile menu panel ── */
   .mobile-menu {
-    display: block;              /* exists in DOM on mobile */
+    display: block;
     position: fixed;
-    top: var(--nav-h);
+    top: 0;                  /* start from very top of screen */
     left: 0; right: 0; bottom: 0;
-    background: #09090E;         /* fully opaque, no transparency */
-    z-index: 1999;               /* above backdrop (1998), below navbar (1000→ wait, see note) */
+    background: #09090E;
+    z-index: 2000;           /* above backdrop, below navbar */
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-    padding: 0.5rem 0 4rem;
-    /* Hidden state */
+    padding-top: var(--nav-h); /* push content below navbar height */
+    padding-bottom: 4rem;
+    padding-left: 0;
+    padding-right: 0;
+    /* Hidden state — slide from right */
     transform: translateX(100%);
-    transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+    transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
     will-change: transform;
   }
   .mobile-menu.open {
     transform: translateX(0);
   }
 
-  /* Backdrop visible */
-  .nav-backdrop { display: block; }
+  /* Backdrop — behind menu, above page */
+  .nav-backdrop {
+    display: block;
+    z-index: 1999;
+  }
 
   /* Nav list inside mobile menu */
   .mobile-nav-list {
