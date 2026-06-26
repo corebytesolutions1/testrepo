@@ -13,13 +13,17 @@
        SERVICE_ID   → Email Services > Service ID (e.g. service_xxxxxx)
        TEMPLATE_ID  → Email Templates > Template ID (e.g. template_xxxxxx)
   ─────────────────────────────────────────────────────────── */
-  const EMAILJS_PUBLIC_KEY  = '8t_obtLIkkufY4g-d';   // ← replace
-  const EMAILJS_SERVICE_ID  = 'service_1t7yl56';   // ← replace
-  const EMAILJS_TEMPLATE_ID = 'template_h6f2wbo';  // ← replace
+  const EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY';   // ← replace
+  const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID';   // ← replace
+  const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';  // ← replace
 
   if (typeof emailjs !== 'undefined') {
     emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
   }
+
+  // Detect touch/coarse-pointer devices — doodles & custom cursor are
+  // mouse-only effects and should not run (or paint) on phones/tablets.
+  const IS_TOUCH_DEVICE = window.matchMedia('(hover: none), (pointer: coarse)').matches;
 
   /* ── 1. Doodle Cursor Canvas ───────────────────────────────*/
   const canvas = document.getElementById('doodle-canvas');
@@ -122,40 +126,45 @@
   const doodles = Array.from({length:8}, (_,i) => new Doodle(i));
   let mouseX = -300, mouseY = -300, mouseOnPage = false;
 
-  document.addEventListener('mousemove', e => { mouseX=e.clientX; mouseY=e.clientY; mouseOnPage=true; }, {passive:true});
-  document.addEventListener('mouseleave', () => { mouseOnPage=false; }, {passive:true});
+  if (!IS_TOUCH_DEVICE) {
+    document.addEventListener('mousemove', e => { mouseX=e.clientX; mouseY=e.clientY; mouseOnPage=true; }, {passive:true});
+    document.addEventListener('mouseleave', () => { mouseOnPage=false; }, {passive:true});
 
-  function animateDoodles() {
-    ctx.clearRect(0,0,W,H);
-    if (mouseOnPage) doodles.forEach(d => { d.update(mouseX,mouseY); d.draw(ctx); });
-    requestAnimationFrame(animateDoodles);
+    function animateDoodles() {
+      ctx.clearRect(0,0,W,H);
+      if (mouseOnPage) doodles.forEach(d => { d.update(mouseX,mouseY); d.draw(ctx); });
+      requestAnimationFrame(animateDoodles);
+    }
+    animateDoodles();
   }
-  animateDoodles();
 
   /* ── 2. Custom Cursor ──────────────────────────────────────*/
   const cursorDot  = document.getElementById('cursorDot');
   const cursorRing = document.getElementById('cursorRing');
-  let dotX=-100, dotY=-100, ringX=-100, ringY=-100;
 
-  document.addEventListener('mousemove', e => { dotX=e.clientX; dotY=e.clientY; }, {passive:true});
+  if (!IS_TOUCH_DEVICE) {
+    let dotX=-100, dotY=-100, ringX=-100, ringY=-100;
 
-  (function tickCursor(){
-    cursorDot.style.left  = dotX+'px'; cursorDot.style.top  = dotY+'px';
-    ringX += (dotX-ringX)*0.12; ringY += (dotY-ringY)*0.12;
-    cursorRing.style.left = ringX+'px'; cursorRing.style.top = ringY+'px';
-    requestAnimationFrame(tickCursor);
-  })();
+    document.addEventListener('mousemove', e => { dotX=e.clientX; dotY=e.clientY; }, {passive:true});
 
-  document.querySelectorAll('a,button,input,select,textarea').forEach(el => {
-    el.addEventListener('mouseenter', () => {
-      cursorRing.style.width='52px'; cursorRing.style.height='52px';
-      cursorRing.style.borderColor='#FF6B35'; cursorDot.style.background='#00C9A7';
+    (function tickCursor(){
+      cursorDot.style.left  = dotX+'px'; cursorDot.style.top  = dotY+'px';
+      ringX += (dotX-ringX)*0.12; ringY += (dotY-ringY)*0.12;
+      cursorRing.style.left = ringX+'px'; cursorRing.style.top = ringY+'px';
+      requestAnimationFrame(tickCursor);
+    })();
+
+    document.querySelectorAll('a,button,input,select,textarea').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursorRing.style.width='52px'; cursorRing.style.height='52px';
+        cursorRing.style.borderColor='#FF6B35'; cursorDot.style.background='#00C9A7';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursorRing.style.width='36px'; cursorRing.style.height='36px';
+        cursorRing.style.borderColor='#00C9A7'; cursorDot.style.background='#FF6B35';
+      });
     });
-    el.addEventListener('mouseleave', () => {
-      cursorRing.style.width='36px'; cursorRing.style.height='36px';
-      cursorRing.style.borderColor='#00C9A7'; cursorDot.style.background='#FF6B35';
-    });
-  });
+  }
 
   /* ── 3. Navbar scroll ──────────────────────────────────────*/
   const navbar = document.getElementById('navbar');
