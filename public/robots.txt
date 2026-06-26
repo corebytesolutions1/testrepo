@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://corebytex.com/sitemap.xml
+
+# Disallow system/config paths
+Disallow: /node_modules/
+Disallow: /.env
+Disallow: /package.json
+Disallow: /package-lock.json
+Disallow: /vercel.json

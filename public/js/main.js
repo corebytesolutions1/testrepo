@@ -1,455 +1,316 @@
 /* ============================================================
-   WAHENOOR EXPORTS LIMITED — main.js
+   CoreByte Solutions — main.js
+   Doodle canvas · Custom cursor · Nav · Counters · Reveal
+   EmailJS contact form with validation & spam protection
    ============================================================ */
 
-// ---- Preloader ----
-window.addEventListener('load', () => {
-  setTimeout(() => {
-    const loader = document.getElementById('preloader');
-    if (loader) loader.classList.add('hidden');
-  }, 1800);
-});
+(function () {
+  'use strict';
 
-// ---- EmailJS Init ----
-// Replace with your actual EmailJS public key
-if (typeof emailjs !== 'undefined') {
-  emailjs.init('d3vcVEQLyUoc76_t9');
-} else {
-  console.warn('EmailJS failed to load — contact form will show a fallback error on submit.');
-}
+  /* ── 0. EmailJS Configuration ──────────────────────────────
+     Replace the three placeholders before going live:
+       PUBLIC_KEY   → Account > API Keys > Public Key
+       SERVICE_ID   → Email Services > Service ID (e.g. service_xxxxxx)
+       TEMPLATE_ID  → Email Templates > Template ID (e.g. template_xxxxxx)
+  ─────────────────────────────────────────────────────────── */
+  const EMAILJS_PUBLIC_KEY  = '8t_obtLIkkufY4g-d';   // ← replace
+  const EMAILJS_SERVICE_ID  = 'service_1t7yl56';   // ← replace
+  const EMAILJS_TEMPLATE_ID = 'template_h6f2wbo';  // ← replace
 
-// ---- Navbar Scroll ----
-const navbar = document.getElementById('navbar');
-window.addEventListener('scroll', () => {
-  if (window.scrollY > 60) {
-    navbar.classList.add('scrolled');
-  } else {
-    navbar.classList.remove('scrolled');
+  if (typeof emailjs !== 'undefined') {
+    emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
   }
-}, { passive: true });
 
-// ---- Mobile Nav Toggle ----
-const navToggle = document.getElementById('navToggle');
-const navLinks = document.getElementById('navLinks');
-navToggle?.addEventListener('click', () => {
-  navLinks.classList.toggle('open');
-  const spans = navToggle.querySelectorAll('span');
-  if (navLinks.classList.contains('open')) {
-    spans[0].style.transform = 'translateY(7px) rotate(45deg)';
-    spans[1].style.opacity = '0';
-    spans[2].style.transform = 'translateY(-7px) rotate(-45deg)';
-  } else {
-    spans[0].style.transform = '';
-    spans[1].style.opacity = '';
-    spans[2].style.transform = '';
+  /* ── 1. Doodle Cursor Canvas ───────────────────────────────*/
+  const canvas = document.getElementById('doodle-canvas');
+  const ctx    = canvas.getContext('2d');
+  let W, H;
+
+  function resizeCanvas() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
   }
-});
-navLinks?.querySelectorAll('.nav-link').forEach(link => {
-  link.addEventListener('click', () => {
-    navLinks.classList.remove('open');
-    const spans = navToggle.querySelectorAll('span');
-    spans[0].style.transform = '';
-    spans[1].style.opacity = '';
-    spans[2].style.transform = '';
-  });
-});
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas, { passive: true });
 
-// ---- Back to Top ----
-const backToTop = document.getElementById('backToTop');
-window.addEventListener('scroll', () => {
-  if (window.scrollY > 400) {
-    backToTop?.classList.add('visible');
-  } else {
-    backToTop?.classList.remove('visible');
-  }
-}, { passive: true });
-backToTop?.addEventListener('click', () => {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-});
+  const DOODLE_TYPES = ['star','heart','circle','triangle','squiggle','diamond'];
+  const COLORS = ['#FF6B35','#00C9A7','#BB86FC','#FFD166','#06D6A0','#EF476F'];
 
-// ---- Scroll Reveal ----
-const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('aos-visible');
+  class Doodle {
+    constructor(i) {
+      this.x      = Math.random() * window.innerWidth;
+      this.y      = Math.random() * window.innerHeight;
+      this.size   = 10 + i * 2.2;
+      this.color  = COLORS[i % COLORS.length];
+      this.type   = DOODLE_TYPES[i % DOODLE_TYPES.length];
+      this.speed  = 0.015 + i * 0.008;
+      this.lag    = 2 + i * 1.6;
+      this.rotation  = Math.random() * Math.PI * 2;
+      this.rotSpeed  = (Math.random() - 0.5) * 0.07;
+      this.alpha     = 0.5 + Math.random() * 0.35;
+      this.wobble    = Math.random() * Math.PI * 2;
+      this.wobbleSpd = 0.04 + Math.random() * 0.04;
+      // fixed offset so doodles spread around cursor
+      this.ox = (Math.random() - 0.5) * 80;
+      this.oy = (Math.random() - 0.5) * 60;
     }
-  });
-}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
-document.querySelectorAll('[data-aos]').forEach(el => {
-  revealObserver.observe(el);
-});
+    update(mx, my) {
+      const tx = mx + this.ox - this.lag * 5;
+      const ty = my + this.oy - this.lag * 3;
+      this.x  += (tx - this.x) * this.speed;
+      this.y  += (ty - this.y) * this.speed;
+      this.rotation  += this.rotSpeed;
+      this.wobble    += this.wobbleSpd;
+    }
 
-// ---- World Map Canvas (Hero) ----
-(function initWorldCanvas() {
-  const canvas = document.getElementById('worldCanvas');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-
-  function resize() {
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
-  }
-  resize();
-  window.addEventListener('resize', resize, { passive: true });
-
-  // Simplified dot-grid world map approximation
-  // Key coordinate clusters representing landmasses
-  const landDots = [];
-  const W = () => canvas.width;
-  const H = () => canvas.height;
-
-  function generateDots() {
-    landDots.length = 0;
-    const w = W(), h = H();
-    const spacing = Math.max(16, Math.floor(w / 80));
-    // We create a simplified geographic point cloud
-    const regions = [
-      // UK / Europe
-      { x: 0.49, y: 0.3, w: 0.07, h: 0.12 },
-      { x: 0.5, y: 0.28, w: 0.1, h: 0.18 },
-      // North America
-      { x: 0.15, y: 0.2, w: 0.18, h: 0.22 },
-      // South America
-      { x: 0.24, y: 0.5, w: 0.1, h: 0.28 },
-      // Africa
-      { x: 0.5, y: 0.42, w: 0.09, h: 0.32 },
-      // Middle East / Asia
-      { x: 0.58, y: 0.28, w: 0.28, h: 0.22 },
-      // South Asia
-      { x: 0.64, y: 0.38, w: 0.08, h: 0.12 },
-      // SE Asia / East Asia
-      { x: 0.74, y: 0.32, w: 0.14, h: 0.2 },
-      // Australia
-      { x: 0.76, y: 0.62, w: 0.1, h: 0.12 },
-      // Russia / N Asia
-      { x: 0.56, y: 0.14, w: 0.32, h: 0.15 },
-    ];
-
-    for (const r of regions) {
-      for (let x = 0; x < w; x += spacing) {
-        for (let y = 0; y < h; y += spacing) {
-          const nx = x / w, ny = y / h;
-          if (nx >= r.x && nx <= r.x + r.w && ny >= r.y && ny <= r.y + r.h) {
-            if (Math.random() < 0.65) {
-              landDots.push({ x, y, alpha: 0.15 + Math.random() * 0.25 });
-            }
-          }
-        }
+    draw(c) {
+      c.save();
+      c.translate(this.x, this.y);
+      c.rotate(this.rotation);
+      c.globalAlpha  = this.alpha * (0.82 + 0.18 * Math.sin(this.wobble));
+      c.strokeStyle  = this.color;
+      c.fillStyle    = this.color + '20';
+      c.lineWidth    = 2;
+      c.lineCap      = 'round';
+      c.lineJoin     = 'round';
+      const s = this.size;
+      switch (this.type) {
+        case 'star':     drawStar(c, s);     c.fill(); c.stroke(); break;
+        case 'heart':    drawHeart(c, s);    c.fill(); c.stroke(); break;
+        case 'circle':
+          c.beginPath(); c.arc(0,0,s*.5,0,Math.PI*2);
+          c.fill(); c.stroke(); break;
+        case 'triangle':
+          c.beginPath(); c.moveTo(0,-s*.6); c.lineTo(s*.55,s*.45); c.lineTo(-s*.55,s*.45); c.closePath();
+          c.fill(); c.stroke(); break;
+        case 'squiggle':
+          c.beginPath(); c.moveTo(-s*.6,0);
+          c.bezierCurveTo(-s*.3,-s*.5, s*.3,s*.5, s*.6,0);
+          c.stroke(); break;
+        case 'diamond':
+          c.beginPath(); c.moveTo(0,-s*.6); c.lineTo(s*.4,0); c.lineTo(0,s*.6); c.lineTo(-s*.4,0); c.closePath();
+          c.fill(); c.stroke(); break;
       }
+      c.restore();
     }
   }
 
-  generateDots();
-  window.addEventListener('resize', () => { generateDots(); }, { passive: true });
-
-  // Trade route pulses: origin = UK (approx center of canvas)
-  const routes = [
-    { tx: 0.24, ty: 0.55 }, // South America
-    { tx: 0.52, ty: 0.56 }, // Africa
-    { tx: 0.62, ty: 0.4  }, // Middle East
-    { tx: 0.67, ty: 0.44 }, // South Asia
-    { tx: 0.78, ty: 0.35 }, // East Asia
-    { tx: 0.17, ty: 0.32 }, // North America
-    { tx: 0.78, ty: 0.66 }, // Australia
-  ];
-
-  const pulses = routes.map((r, i) => ({
-    route: r,
-    t: (i / routes.length),
-    speed: 0.004 + Math.random() * 0.002,
-    size: 0,
-    maxSize: 6,
-  }));
-
-  function lerp(a, b, t) { return a + (b - a) * t; }
-
-  function draw() {
-    const w = W(), h = H();
-    ctx.clearRect(0, 0, w, h);
-
-    // Draw land dots
-    for (const dot of landDots) {
-      ctx.beginPath();
-      ctx.arc(dot.x * (w / (w)), dot.y * (h / (h)), 1.5, 0, Math.PI * 2);
-      // Recalculate positions based on current canvas size
-      ctx.fillStyle = `rgba(245,194,66,${dot.alpha})`;
-      ctx.fill();
+  function drawStar(c, s) {
+    const spikes=5, or=s, ir=s*.42;
+    let rot = -Math.PI/2;
+    const step = Math.PI/spikes;
+    c.beginPath(); c.moveTo(Math.cos(rot)*or, Math.sin(rot)*or);
+    for(let i=0;i<spikes;i++){
+      rot+=step; c.lineTo(Math.cos(rot)*ir, Math.sin(rot)*ir);
+      rot+=step; c.lineTo(Math.cos(rot)*or, Math.sin(rot)*or);
     }
-
-    // Origin: UK position
-    const ox = w * 0.502;
-    const oy = h * 0.305;
-
-    // Draw trade routes
-    for (const p of pulses) {
-      const tx = w * p.route.tx;
-      const ty = h * p.route.ty;
-
-      // Route line
-      const grad = ctx.createLinearGradient(ox, oy, tx, ty);
-      grad.addColorStop(0, 'rgba(245,194,66,0.4)');
-      grad.addColorStop(0.5, 'rgba(245,194,66,0.15)');
-      grad.addColorStop(1, 'rgba(245,194,66,0.4)');
-      ctx.beginPath();
-      ctx.moveTo(ox, oy);
-
-      // Bezier curve for arc effect
-      const mx = (ox + tx) / 2;
-      const my = Math.min(oy, ty) - Math.abs(tx - ox) * 0.25;
-      ctx.quadraticCurveTo(mx, my, tx, ty);
-      ctx.strokeStyle = grad;
-      ctx.lineWidth = 0.8;
-      ctx.setLineDash([4, 6]);
-      ctx.stroke();
-      ctx.setLineDash([]);
-
-      // Moving pulse dot along route
-      p.t += p.speed;
-      if (p.t > 1) p.t = 0;
-      const px = bezierPoint(ox, mx, tx, p.t);
-      const py = bezierPoint(oy, my, ty, p.t);
-
-      ctx.beginPath();
-      ctx.arc(px, py, 3, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(245,194,66,0.9)';
-      ctx.fill();
-
-      // Destination dot
-      ctx.beginPath();
-      ctx.arc(tx, ty, 4, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(245,194,66,0.5)';
-      ctx.fill();
-      ctx.beginPath();
-      ctx.arc(tx, ty, 2, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(245,194,66,1)';
-      ctx.fill();
-    }
-
-    // Origin dot (UK) — glowing
-    const now = Date.now() / 1000;
-    const pulse = 0.5 + 0.5 * Math.sin(now * 2);
-    ctx.beginPath();
-    ctx.arc(ox, oy, 8 + pulse * 4, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(245,194,66,${0.05 + pulse * 0.08})`;
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(ox, oy, 5, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(245,194,66,0.8)';
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(ox, oy, 2.5, 0, Math.PI * 2);
-    ctx.fillStyle = '#F5C242';
-    ctx.fill();
-
-    requestAnimationFrame(draw);
+    c.closePath();
   }
 
-  function bezierPoint(p0, p1, p2, t) {
-    return (1 - t) * (1 - t) * p0 + 2 * (1 - t) * t * p1 + t * t * p2;
+  function drawHeart(c, s) {
+    s *= 0.55;
+    c.beginPath();
+    c.moveTo(0, s*.3);
+    c.bezierCurveTo(0,-s*.3, -s,-s*.3, -s,s*.2);
+    c.bezierCurveTo(-s,s*.7,  0, s,    0,s*1.1);
+    c.bezierCurveTo(0, s,     s, s*.7, s,s*.2);
+    c.bezierCurveTo(s,-s*.3,  0,-s*.3, 0,s*.3);
+    c.closePath();
   }
 
-  requestAnimationFrame(draw);
-})();
+  const doodles = Array.from({length:8}, (_,i) => new Doodle(i));
+  let mouseX = -300, mouseY = -300, mouseOnPage = false;
 
-// ---- Mini Map Canvas (Reach Section) ----
-(function initMiniMap() {
-  const canvas = document.getElementById('miniMapCanvas');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
+  document.addEventListener('mousemove', e => { mouseX=e.clientX; mouseY=e.clientY; mouseOnPage=true; }, {passive:true});
+  document.addEventListener('mouseleave', () => { mouseOnPage=false; }, {passive:true});
 
-  function resize() {
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
+  function animateDoodles() {
+    ctx.clearRect(0,0,W,H);
+    if (mouseOnPage) doodles.forEach(d => { d.update(mouseX,mouseY); d.draw(ctx); });
+    requestAnimationFrame(animateDoodles);
   }
-  resize();
+  animateDoodles();
 
-  const cities = [
-    { name: 'London', x: 0.48, y: 0.28, home: true },
-    { name: 'Dubai', x: 0.62, y: 0.42 },
-    { name: 'Mumbai', x: 0.66, y: 0.46 },
-    { name: 'Shanghai', x: 0.78, y: 0.35 },
-    { name: 'Lagos', x: 0.5, y: 0.54 },
-    { name: 'New York', x: 0.21, y: 0.32 },
-    { name: 'Rotterdam', x: 0.51, y: 0.27 },
-    { name: 'Singapore', x: 0.74, y: 0.52 },
-  ];
+  /* ── 2. Custom Cursor ──────────────────────────────────────*/
+  const cursorDot  = document.getElementById('cursorDot');
+  const cursorRing = document.getElementById('cursorRing');
+  let dotX=-100, dotY=-100, ringX=-100, ringY=-100;
 
-  let frame = 0;
-  function draw() {
-    const w = canvas.width, h = canvas.height;
-    ctx.clearRect(0, 0, w, h);
+  document.addEventListener('mousemove', e => { dotX=e.clientX; dotY=e.clientY; }, {passive:true});
 
-    // Background grid
-    ctx.strokeStyle = 'rgba(245,194,66,0.05)';
-    ctx.lineWidth = 0.5;
-    for (let x = 0; x < w; x += 40) {
-      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
-    }
-    for (let y = 0; y < h; y += 40) {
-      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
-    }
+  (function tickCursor(){
+    cursorDot.style.left  = dotX+'px'; cursorDot.style.top  = dotY+'px';
+    ringX += (dotX-ringX)*0.12; ringY += (dotY-ringY)*0.12;
+    cursorRing.style.left = ringX+'px'; cursorRing.style.top = ringY+'px';
+    requestAnimationFrame(tickCursor);
+  })();
 
-    const home = cities.find(c => c.home);
-    const hx = home.x * w, hy = home.y * h;
-
-    // Draw connections
-    cities.filter(c => !c.home).forEach((city, i) => {
-      const cx = city.x * w, cy = city.y * h;
-      const t = ((frame / 80 + i / cities.length) % 1);
-
-      // Line
-      ctx.beginPath();
-      ctx.moveTo(hx, hy);
-      const mx = (hx + cx) / 2, my = Math.min(hy, cy) - 30;
-      ctx.quadraticCurveTo(mx, my, cx, cy);
-      ctx.strokeStyle = 'rgba(245,194,66,0.2)';
-      ctx.lineWidth = 1;
-      ctx.setLineDash([3, 5]);
-      ctx.stroke();
-      ctx.setLineDash([]);
-
-      // Moving dot
-      const px = bezier2(hx, mx, cx, t);
-      const py = bezier2(hy, my, cy, t);
-      ctx.beginPath();
-      ctx.arc(px, py, 2.5, 0, Math.PI * 2);
-      ctx.fillStyle = '#F5C242';
-      ctx.fill();
-
-      // City dot
-      ctx.beginPath();
-      ctx.arc(cx, cy, 3.5, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(245,194,66,0.6)';
-      ctx.fill();
-      ctx.beginPath();
-      ctx.arc(cx, cy, 1.5, 0, Math.PI * 2);
-      ctx.fillStyle = '#F5C242';
-      ctx.fill();
+  document.querySelectorAll('a,button,input,select,textarea').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursorRing.style.width='52px'; cursorRing.style.height='52px';
+      cursorRing.style.borderColor='#FF6B35'; cursorDot.style.background='#00C9A7';
     });
+    el.addEventListener('mouseleave', () => {
+      cursorRing.style.width='36px'; cursorRing.style.height='36px';
+      cursorRing.style.borderColor='#00C9A7'; cursorDot.style.background='#FF6B35';
+    });
+  });
 
-    // Home (London) dot
-    const pulse = 0.5 + 0.5 * Math.sin(frame / 15);
-    ctx.beginPath();
-    ctx.arc(hx, hy, 6 + pulse * 3, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(245,194,66,${0.06 + pulse * 0.06})`;
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(hx, hy, 4, 0, Math.PI * 2);
-    ctx.fillStyle = '#F5C242';
-    ctx.fill();
+  /* ── 3. Navbar scroll ──────────────────────────────────────*/
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => navbar.classList.toggle('scrolled', window.scrollY>30), {passive:true});
 
-    frame++;
-    requestAnimationFrame(draw);
+  /* ── 4. Mobile hamburger ───────────────────────────────────*/
+  const hamburger = document.getElementById('hamburger');
+  const navLinks  = document.getElementById('navLinks');
+
+  function closeMenu() {
+    navLinks.classList.remove('open');
+    hamburger.classList.remove('active');
+    navbar.classList.remove('menu-open');
+    document.body.classList.remove('nav-open');
+    hamburger.setAttribute('aria-expanded', 'false');
+  }
+  function openMenu() {
+    navLinks.classList.add('open');
+    hamburger.classList.add('active');
+    navbar.classList.add('menu-open');
+    document.body.classList.add('nav-open');
+    hamburger.setAttribute('aria-expanded', 'true');
+  }
+  hamburger.addEventListener('click', () => {
+    navLinks.classList.contains('open') ? closeMenu() : openMenu();
+  });
+  navLinks.querySelectorAll('.nav-link').forEach(l => l.addEventListener('click', closeMenu));
+  // Close on resize back to desktop
+  window.addEventListener('resize', () => { if (window.innerWidth > 768) closeMenu(); });
+  // Close on escape key
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
+
+  /* ── 5. Smooth scroll ──────────────────────────────────────*/
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', function(e){
+      const t = document.querySelector(this.getAttribute('href'));
+      if(t){ e.preventDefault(); t.scrollIntoView({behavior:'smooth',block:'start'}); }
+    });
+  });
+
+  /* ── 6. Scroll reveal ──────────────────────────────────────*/
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach((entry,i) => {
+      if(entry.isIntersecting){
+        setTimeout(() => entry.target.classList.add('visible'), i*90);
+        revealObs.unobserve(entry.target);
+      }
+    });
+  },{threshold:0.1, rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+  /* ── 7. Active nav on scroll ───────────────────────────────*/
+  const sections  = document.querySelectorAll('section[id]');
+  const navAnchors= document.querySelectorAll('.nav-link[href^="#"]');
+  window.addEventListener('scroll', () => {
+    const sy = window.scrollY+100;
+    sections.forEach(s => {
+      if(sy >= s.offsetTop && sy < s.offsetTop+s.offsetHeight){
+        navAnchors.forEach(a => a.classList.remove('active'));
+        const m = document.querySelector(`.nav-link[href="#${s.id}"]`);
+        if(m) m.classList.add('active');
+      }
+    });
+  },{passive:true});
+
+  /* ── 9. Contact Form — EmailJS ─────────────────────────────
+     EmailJS Template variables used:
+       {{from_name}}   — sender's name
+       {{from_email}}  — sender's email
+       {{from_phone}}  — sender's phone (optional)
+       {{service}}     — service interested in
+       {{message}}     — message body
+       {{reply_to}}    — same as from_email (for Reply-To header)
+  ─────────────────────────────────────────────────────────── */
+  const form       = document.getElementById('contactForm');
+  const submitBtn  = document.getElementById('submitBtn');
+  const successBox = document.getElementById('formSuccess');
+  const errorBox   = document.getElementById('formError');
+
+  if (!form) return;
+
+  // ── inline validation helpers ──
+  function showErr(id, show) {
+    const el = document.getElementById(id);
+    if (el) el.style.display = show ? 'block' : 'none';
+  }
+  function validateField(input, errId, check) {
+    const ok = check(input.value.trim());
+    input.classList.toggle('invalid', !ok);
+    showErr(errId, !ok);
+    return ok;
   }
 
-  function bezier2(p0, p1, p2, t) {
-    return (1-t)*(1-t)*p0 + 2*(1-t)*t*p1 + t*t*p2;
-  }
+  const nameInput  = document.getElementById('cf-name');
+  const emailInput = document.getElementById('cf-email');
+  const msgInput   = document.getElementById('cf-message');
 
-  draw();
+  nameInput.addEventListener('blur',  () => validateField(nameInput,  'err-name',  v => v.length >= 2));
+  emailInput.addEventListener('blur', () => validateField(emailInput, 'err-email', v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)));
+  msgInput.addEventListener('blur',   () => validateField(msgInput,   'err-msg',   v => v.length >= 20));
+
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    // ── honeypot check ──
+    const honey = form.querySelector('[name="_honey"]');
+    if (honey && honey.value) return; // silently reject bots
+
+    // ── validate all required fields ──
+    const nameOk  = validateField(nameInput,  'err-name',  v => v.length >= 2);
+    const emailOk = validateField(emailInput, 'err-email', v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v));
+    const msgOk   = validateField(msgInput,   'err-msg',   v => v.length >= 20);
+    if (!nameOk || !emailOk || !msgOk) {
+      // scroll to first invalid field
+      (form.querySelector('.invalid') || nameInput).scrollIntoView({behavior:'smooth',block:'center'});
+      return;
+    }
+
+    // ── loading state ──
+    submitBtn.classList.add('loading');
+    submitBtn.disabled = true;
+    successBox.style.display = 'none';
+    errorBox.style.display   = 'none';
+
+    const serviceEl = document.getElementById('cf-service');
+    const phoneEl   = document.getElementById('cf-phone');
+
+    const templateParams = {
+      from_name  : nameInput.value.trim(),
+      from_email : emailInput.value.trim(),
+      from_phone : phoneEl ? phoneEl.value.trim() : '',
+      service    : serviceEl ? serviceEl.value || 'Not specified' : 'Not specified',
+      message    : msgInput.value.trim(),
+      reply_to   : emailInput.value.trim(),
+    };
+
+    try {
+      if (typeof emailjs === 'undefined') throw new Error('EmailJS not loaded');
+
+      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
+
+      form.reset();
+      successBox.style.display = 'block';
+      successBox.scrollIntoView({behavior:'smooth',block:'nearest'});
+      setTimeout(() => { successBox.style.display='none'; }, 7000);
+
+    } catch (err) {
+      console.error('[EmailJS error]', err);
+      errorBox.style.display = 'block';
+      errorBox.scrollIntoView({behavior:'smooth',block:'nearest'});
+      setTimeout(() => { errorBox.style.display='none'; }, 8000);
+    } finally {
+      submitBtn.classList.remove('loading');
+      submitBtn.disabled = false;
+    }
+  });
+
 })();
-
-// ---- Contact Form (EmailJS) ----
-const form = document.getElementById('contactForm');
-form?.addEventListener('submit', async (e) => {
-  e.preventDefault();
-
-  const submitBtn = document.getElementById('submitBtn');
-  const btnText = submitBtn.querySelector('.btn-text');
-  const btnLoader = submitBtn.querySelector('.btn-loader');
-  const formMessage = document.getElementById('formMessage');
-
-  // Basic validation
-  const required = ['from_name', 'reply_to', 'commodity', 'trade_type', 'message'];
-  let valid = true;
-  required.forEach(id => {
-    const field = document.getElementById(id);
-    if (!field.value.trim()) {
-      field.style.borderColor = 'rgba(239,68,68,0.5)';
-      valid = false;
-    } else {
-      field.style.borderColor = '';
-    }
-  });
-
-  if (!valid) {
-    formMessage.className = 'form-message error';
-    formMessage.style.display = 'block';
-    formMessage.textContent = 'Please fill in all required fields.';
-    return;
-  }
-
-  // Email validation
-  const emailField = document.getElementById('reply_to');
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(emailField.value)) {
-    emailField.style.borderColor = 'rgba(239,68,68,0.5)';
-    formMessage.className = 'form-message error';
-    formMessage.style.display = 'block';
-    formMessage.textContent = 'Please enter a valid email address.';
-    return;
-  }
-
-  // Loading state
-  btnText.style.display = 'none';
-  btnLoader.style.display = 'inline-flex';
-  submitBtn.disabled = true;
-  formMessage.style.display = 'none';
-
-  // Gather form data
-  const templateParams = {
-    from_name:  document.getElementById('from_name').value,
-    company:    document.getElementById('company').value || 'N/A',
-    reply_to:   document.getElementById('reply_to').value,
-    phone:      document.getElementById('phone').value || 'N/A',
-    commodity:  document.getElementById('commodity').value,
-    trade_type: document.getElementById('trade_type').value,
-    quantity:   document.getElementById('quantity').value || 'N/A',
-    message:    document.getElementById('message').value,
-    to_name:    'Wahenoor Exports Team',
-  };
-
-  try {
-    if (typeof emailjs === 'undefined') {
-      throw new Error('EmailJS not loaded');
-    }
-    // Replace 'YOUR_SERVICE_ID' and 'YOUR_TEMPLATE_ID' with your actual EmailJS IDs
-    await emailjs.send('service_45qi9mk', 'template_ihgl3bp', templateParams);
-
-    formMessage.className = 'form-message success';
-    formMessage.style.display = 'block';
-    formMessage.innerHTML = '✓ Thank you! Your enquiry has been received. We will respond within 24 hours.';
-    form.reset();
-  } catch (error) {
-    console.error('EmailJS error:', error);
-    formMessage.className = 'form-message error';
-    formMessage.style.display = 'block';
-    formMessage.innerHTML = `Unable to send your message. Please email us directly at <a href="mailto:info@welexports.com" style="color:var(--gold)">info@welexports.com</a>`;
-  } finally {
-    btnText.style.display = 'inline';
-    btnLoader.style.display = 'none';
-    submitBtn.disabled = false;
-  }
-});
-
-// Clear field error styles on input
-document.querySelectorAll('input, select, textarea').forEach(field => {
-  field.addEventListener('input', () => {
-    field.style.borderColor = '';
-  });
-});
-
-// ---- Active Nav Link on Scroll ----
-const sections = document.querySelectorAll('section[id]');
-const navLinkEls = document.querySelectorAll('.nav-link:not(.nav-cta)');
-window.addEventListener('scroll', () => {
-  const scrollPos = window.scrollY + 120;
-  sections.forEach(section => {
-    if (scrollPos >= section.offsetTop && scrollPos < section.offsetTop + section.offsetHeight) {
-      navLinkEls.forEach(link => link.classList.remove('active'));
-      const active = document.querySelector(`.nav-link[href="#${section.id}"]`);
-      if (active) active.classList.add('active');
-    }
-  });
-}, { passive: true });
