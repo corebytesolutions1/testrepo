@@ -1,0 +1,35 @@
+[
+  {
+    "id": 1,
+    "title": "Revised Tariff Schedule Effective April 2026",
+    "date": "2026-07-20",
+    "time": "10:00",
+    "category": "Tariff",
+    "description": "Please note the revised CFS tariff schedule applicable from the notified date. Download the attached circular for full details.",
+    "pdf": "/pdf/notice-tariff-2026.pdf",
+    "pinned": true,
+    "isNew": true
+  },
+  {
+    "id": 2,
+    "title": "Extended Working Hours During Peak Season",
+    "date": "2026-07-05",
+    "time": "09:30",
+    "category": "Operations",
+    "description": "CFS-OWPL gate and yard operations will run extended hours to accommodate peak season cargo volumes.",
+    "pdf": "/pdf/notice-working-hours.pdf",
+    "pinned": false,
+    "isNew": true
+  },
+  {
+    "id": 3,
+    "title": "Customs Holiday Schedule Notification",
+    "date": "2026-06-15",
+    "time": "11:00",
+    "category": "Customs",
+    "description": "Notification regarding customs clearance availability during the upcoming holiday schedule.",
+    "pdf": "/pdf/notice-holiday-schedule.pdf",
+    "pinned": false,
+    "isNew": false
+  }
+]

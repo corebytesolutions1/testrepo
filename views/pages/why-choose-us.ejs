@@ -1,0 +1,25 @@
+<%- include('../partials/breadcrumb', { pageTitle: 'Why Choose Us' }) %>
+
+<section class="py-24 px-5 lg:px-8 bg-white">
+  <div class="max-w-7xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <% const reasons = [
+      ["award", "25+ Years Experience", "Over two decades of proven CFS and warehousing operations."],
+      ["star", "First Private CFS in Punjab", "A pioneering track record since " + site.established + "."],
+      ["map-pin", "Strategic Location", "Positioned on Chandigarh Road, Ludhiana, at the heart of Punjab's trade corridor."],
+      ["train-front", "Multi-Railhead Connectivity", "Direct links to CONCOR, Pristine, GDL, HTPL, Adani, and PLIL."],
+      ["anchor", "Gateway Port Connectivity", "Established road linkage to Mundra, Pipavav, Nhava Sheva (JNPT) and beyond."],
+      ["warehouse", "Warehousing Infrastructure", "Modern bonded and general warehousing built for scale."],
+      ["shield-check", "Reliable Operations", "Consistent, dependable cargo handling and turnaround."],
+      ["users", "Experienced Workforce", "A trained, experienced team overseeing every operation."],
+      ["zap", "Fast Cargo Handling", "Mechanized handling equipment for quick, safe turnaround."],
+      ["headset", "Customer Support", "Dedicated support for exporters and importers at every step."]
+    ]; %>
+    <% reasons.forEach((r, i) => { %>
+      <div data-aos="fade-up" data-aos-delay="<%= (i % 3) * 100 %>" class="p-8 rounded-xl bg-[#F5F7FA] hover:bg-navy hover:text-white transition-all group">
+        <i data-lucide="<%= r[0] %>" class="w-8 h-8 text-accent mb-4"></i>
+        <h3 class="font-heading font-semibold text-lg mb-2 text-navy group-hover:text-white transition"><%= r[1] %></h3>
+        <p class="text-sm text-steel group-hover:text-white/70 transition leading-relaxed"><%= r[2] %></p>
+      </div>
+    <% }) %>
+  </div>
+</section>

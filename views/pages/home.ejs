@@ -1,0 +1,226 @@
+<!-- HERO -->
+<section class="relative h-[92vh] min-h-[600px] flex items-center bg-navy overflow-hidden">
+  <div class="absolute inset-0 bg-[url('/images/hero-yard.jpg')] bg-cover bg-center opacity-40"></div>
+  <div class="absolute inset-0 bg-gradient-to-t from-navy via-navy/70 to-navy/40"></div>
+  <!-- tsParticles background layer -->
+  <div id="hero-particles" class="absolute inset-0 pointer-events-none"></div>
+
+  <div class="relative max-w-7xl mx-auto px-5 lg:px-8 w-full">
+    <p data-aos="fade-up" class="text-accent font-semibold tracking-[0.25em] uppercase text-xs mb-4">
+      Since <%= site.established %> &middot; <%= site.yearsOfExcellence %>+ Years of Excellence
+    </p>
+    <h1 data-aos="fade-up" data-aos-delay="100" class="font-heading font-extrabold text-white text-4xl md:text-6xl leading-tight max-w-3xl">
+      North India's Leading <span class="text-accent">Container Freight Station</span>
+    </h1>
+    <p data-aos="fade-up" data-aos-delay="200" class="text-white/70 max-w-xl mt-6 text-lg">
+      Punjab's first private CFS, connecting exporters and importers across Punjab, Himachal Pradesh &amp; Jammu to the world — from factory to gateway port.
+    </p>
+    <div data-aos="fade-up" data-aos-delay="300" class="flex flex-wrap gap-4 mt-9">
+      <a href="/services" class="bg-accent hover:bg-accent/90 text-white font-semibold px-7 py-3.5 rounded-md transition">Explore Services</a>
+      <a href="/contact-us" class="border border-white/30 hover:border-white text-white font-semibold px-7 py-3.5 rounded-md transition">Get in Touch</a>
+    </div>
+  </div>
+
+  <a href="#intro" class="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/60 animate-bounce">
+    <i data-lucide="chevron-down" class="w-7 h-7"></i>
+  </a>
+</section>
+
+<!-- INTRO + CONTAINER DROP/STACK -->
+<section id="intro" class="py-24 px-5 lg:px-8 bg-white overflow-hidden">
+  <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-14 items-center">
+    <div data-aos="fade-right">
+      <p class="text-accent font-semibold tracking-[0.2em] uppercase text-xs mb-3">About CFS-OWPL</p>
+      <h2 class="font-heading font-bold text-3xl md:text-4xl text-navy mb-5">
+        A Trusted Gateway for EXIM Trade, Since <%= site.established %>
+      </h2>
+      <p class="text-steel leading-relaxed mb-4">
+        <%= site.companyName %> operates <%= site.cfsName %>, recognized as the first private Container Freight Station in Punjab. For more than <%= site.yearsOfExcellence %> years,
+        we have served exporters and importers across <%= site.regionsServed.join(", ") %> with complete EXIM cargo movement and end-to-end logistics support.
+      </p>
+      <p class="text-steel leading-relaxed">
+        From bonded warehousing to multi-railhead rail connectivity and road linkage with India's major gateway ports, CFS-OWPL is built to move your cargo reliably, securely, and on time.
+      </p>
+      <a href="/about-us" class="inline-flex items-center gap-2 text-accent font-semibold mt-6 hover:gap-3 transition-all">
+        Learn More About Us <i data-lucide="arrow-right" class="w-4 h-4"></i>
+      </a>
+    </div>
+
+    <!-- Containers drop from above and stack on scroll -->
+    <div id="container-stack" class="relative h-[420px]">
+      <div class="container-drop absolute inset-x-0 top-0" data-stack-index="0" data-label="WAREHOUSE" data-color="bg-accent">
+        <div class="container-box bg-accent">
+          <span>WAREHOUSE</span>
+        </div>
+      </div>
+      <div class="container-drop absolute inset-x-0 top-0" data-stack-index="1" data-label="CFS-OWPL" data-color="bg-navy">
+        <div class="container-box bg-navy border-2 border-white/10">
+          <span>CFS-OWPL</span>
+        </div>
+      </div>
+      <div class="container-drop absolute inset-x-0 top-0" data-stack-index="2" data-label="CARGO" data-color="bg-steel">
+        <div class="container-box bg-steel">
+          <span>CARGO</span>
+        </div>
+      </div>
+      <div class="container-drop absolute inset-x-0 top-0" data-stack-index="3" data-label="EXIM" data-color="bg-accent">
+        <div class="container-box bg-accent">
+          <span>EXIM</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="bg-navy py-16 px-5 lg:px-8">
+  <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+    <div data-aos="fade-up">
+      <div class="font-heading font-extrabold text-4xl md:text-5xl text-accent counter" data-target="<%= site.yearsOfExcellence %>">0</div>
+      <p class="text-white/60 text-sm mt-2 uppercase tracking-wide">Years of Experience</p>
+    </div>
+    <div data-aos="fade-up" data-aos-delay="100">
+      <div class="font-heading font-extrabold text-4xl md:text-5xl text-accent counter" data-target="6">0</div>
+      <p class="text-white/60 text-sm mt-2 uppercase tracking-wide">Railhead Connections</p>
+    </div>
+    <div data-aos="fade-up" data-aos-delay="200">
+      <div class="font-heading font-extrabold text-4xl md:text-5xl text-accent counter" data-target="3">0</div>
+      <p class="text-white/60 text-sm mt-2 uppercase tracking-wide">States Served</p>
+    </div>
+    <div data-aos="fade-up" data-aos-delay="300">
+      <div class="font-heading font-extrabold text-4xl md:text-5xl text-accent counter" data-target="1">0</div>
+      <p class="text-white/60 text-sm mt-2 uppercase tracking-wide">First Private CFS in Punjab</p>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES OVERVIEW -->
+<section class="py-24 px-5 lg:px-8 bg-white">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center max-w-2xl mx-auto mb-14" data-aos="fade-up">
+      <p class="text-accent font-semibold tracking-[0.2em] uppercase text-xs mb-3">What We Offer</p>
+      <h2 class="font-heading font-bold text-3xl md:text-4xl text-navy">Comprehensive EXIM &amp; Warehousing Services</h2>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% services.forEach((s, i) => { %>
+        <div data-aos="fade-up" data-aos-delay="<%= (i % 3) * 100 %>" class="group p-7 rounded-xl border border-black/5 hover:border-accent/40 hover:shadow-xl transition-all bg-white">
+          <div class="w-12 h-12 rounded-lg bg-navy/5 group-hover:bg-accent/10 flex items-center justify-center mb-5 transition">
+            <i data-lucide="<%= s.icon %>" class="w-6 h-6 text-navy group-hover:text-accent transition"></i>
+          </div>
+          <h3 class="font-heading font-semibold text-lg text-navy mb-2"><%= s.title %></h3>
+          <p class="text-steel text-sm leading-relaxed"><%= s.short %></p>
+        </div>
+      <% }) %>
+    </div>
+    <div class="text-center mt-12" data-aos="fade-up">
+      <a href="/services" class="inline-flex items-center gap-2 border border-navy/20 hover:border-accent hover:text-accent font-semibold px-7 py-3 rounded-md transition">
+        View All Services <i data-lucide="arrow-right" class="w-4 h-4"></i>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- WHY CHOOSE US STRIP -->
+<section class="py-24 px-5 lg:px-8 bg-[#F5F7FA]">
+  <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-14 items-center">
+    <div data-aos="fade-right" class="order-2 md:order-1 grid grid-cols-2 gap-4">
+      <% const wcu = [
+        ["shield-check", "25+ Years Experience"],
+        ["train-front", "Multi-Railhead Connectivity"],
+        ["map-pin", "Strategic Location"],
+        ["users", "Experienced Workforce"]
+      ]; %>
+      <% wcu.forEach(([icon, label]) => { %>
+        <div class="bg-white rounded-xl p-6 shadow-sm border border-black/5">
+          <i data-lucide="<%= icon %>" class="w-7 h-7 text-accent mb-3"></i>
+          <p class="font-semibold text-navy text-sm"><%= label %></p>
+        </div>
+      <% }) %>
+    </div>
+    <div data-aos="fade-left" class="order-1 md:order-2">
+      <p class="text-accent font-semibold tracking-[0.2em] uppercase text-xs mb-3">Why Choose OWPL</p>
+      <h2 class="font-heading font-bold text-3xl md:text-4xl text-navy mb-5">Built on Trust, Infrastructure &amp; Reliability</h2>
+      <p class="text-steel leading-relaxed mb-6">
+        As Punjab's first private Container Freight Station, CFS-OWPL combines decades of operational experience with modern infrastructure and multi-modal connectivity — giving your cargo a fast, dependable path to market.
+      </p>
+      <a href="/why-choose-us" class="inline-flex items-center gap-2 text-accent font-semibold hover:gap-3 transition-all">
+        See Why We're Different <i data-lucide="arrow-right" class="w-4 h-4"></i>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CONNECTIVITY -->
+<section class="py-24 px-5 lg:px-8 bg-white">
+  <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-10">
+    <div data-aos="fade-up" class="rounded-2xl bg-navy p-10 text-white">
+      <i data-lucide="train-front" class="w-9 h-9 text-accent mb-5"></i>
+      <h3 class="font-heading font-bold text-2xl mb-3">Rail Connectivity</h3>
+      <p class="text-white/60 text-sm leading-relaxed mb-6">Direct linkage to major ICDs and railheads for efficient, cost-effective cargo movement.</p>
+      <div class="flex flex-wrap gap-2 mb-6">
+        <% site.railheads.forEach(r => { %>
+          <span class="text-xs bg-white/10 px-3 py-1.5 rounded-full"><%= r %></span>
+        <% }) %>
+      </div>
+      <a href="/rail-connectivity" class="inline-flex items-center gap-2 text-accent font-semibold text-sm hover:gap-3 transition-all">View Rail Network <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+    </div>
+    <div data-aos="fade-up" data-aos-delay="100" class="rounded-2xl bg-[#F5F7FA] p-10">
+      <i data-lucide="truck" class="w-9 h-9 text-accent mb-5"></i>
+      <h3 class="font-heading font-bold text-2xl text-navy mb-3">Road Connectivity</h3>
+      <p class="text-steel text-sm leading-relaxed mb-6">Well-established road transport to India's major gateway ports.</p>
+      <div class="flex flex-wrap gap-2 mb-6">
+        <% site.ports.forEach(p => { %>
+          <span class="text-xs bg-navy/5 text-navy px-3 py-1.5 rounded-full"><%= p %></span>
+        <% }) %>
+      </div>
+      <a href="/road-connectivity" class="inline-flex items-center gap-2 text-accent font-semibold text-sm hover:gap-3 transition-all">View Road Network <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+    </div>
+  </div>
+</section>
+
+<!-- NOTICE BOARD PREVIEW -->
+<section class="py-24 px-5 lg:px-8 bg-[#F5F7FA]">
+  <div class="max-w-7xl mx-auto">
+    <div class="flex flex-wrap items-end justify-between gap-4 mb-10" data-aos="fade-up">
+      <div>
+        <p class="text-accent font-semibold tracking-[0.2em] uppercase text-xs mb-3">Stay Updated</p>
+        <h2 class="font-heading font-bold text-3xl md:text-4xl text-navy">Notice Board</h2>
+      </div>
+      <a href="/notices" class="text-accent font-semibold text-sm hover:underline">View All Notices &rarr;</a>
+    </div>
+    <div class="grid md:grid-cols-3 gap-6">
+      <% notices.forEach((n, i) => { %>
+        <div data-aos="fade-up" data-aos-delay="<%= i * 100 %>" class="bg-white rounded-xl p-6 border border-black/5 relative">
+          <% if (n.isNew) { %><span class="absolute top-5 right-5 text-[10px] font-bold text-white bg-accent px-2 py-0.5 rounded-full animate-pulse">NEW</span><% } %>
+          <p class="text-xs text-steel mb-2"><%= n.category %> &middot; <%= new Date(n.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) %></p>
+          <h3 class="font-heading font-semibold text-navy mb-2 pr-10"><%= n.title %></h3>
+          <p class="text-steel text-sm leading-relaxed mb-4"><%= n.description %></p>
+          <a href="<%= n.pdf %>" class="inline-flex items-center gap-1.5 text-accent text-sm font-semibold hover:gap-2.5 transition-all">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i> Download
+          </a>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+</section>
+
+<!-- MAP + CTA -->
+<section class="py-24 px-5 lg:px-8 bg-white">
+  <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-10 items-stretch">
+    <div data-aos="fade-right" class="rounded-2xl overflow-hidden border border-black/10 min-h-[320px] bg-[#e9edf1] flex items-center justify-center text-steel text-sm">
+      <!-- Google Map Placeholder: replace src with a live embed URL -->
+      <div class="text-center p-8">
+        <i data-lucide="map" class="w-10 h-10 mx-auto mb-3 text-accent"></i>
+        Google Map Embed Placeholder<br>
+        <%= site.address.line1 %>, <%= site.address.city %>, <%= site.address.state %>
+      </div>
+    </div>
+    <div data-aos="fade-left" class="rounded-2xl bg-navy p-10 text-white flex flex-col justify-center">
+      <h3 class="font-heading font-bold text-3xl mb-4">Ready to Move Your Cargo?</h3>
+      <p class="text-white/60 mb-8">Get in touch with our team for CFS booking, warehousing enquiries, or logistics support.</p>
+      <a href="/contact-us" class="inline-flex items-center justify-center gap-2 bg-accent hover:bg-accent/90 text-white font-semibold px-7 py-3.5 rounded-md transition w-fit">
+        Contact Our Team <i data-lucide="arrow-right" class="w-4 h-4"></i>
+      </a>
+    </div>
+  </div>
+</section>

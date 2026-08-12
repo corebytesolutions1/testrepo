@@ -1,0 +1,63 @@
+<header id="site-header" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 <%= active === 'home' ? 'bg-transparent' : 'bg-navy' %>">
+  <div class="max-w-7xl mx-auto px-5 lg:px-8 flex items-center justify-between h-20">
+
+    <a href="/" class="flex items-center gap-2">
+      <div class="w-10 h-10 rounded bg-accent flex items-center justify-center font-heading font-extrabold text-white">O</div>
+      <div class="leading-tight">
+        <div class="font-heading font-bold text-white text-lg tracking-wide">OWPL</div>
+        <div class="text-[10px] text-white/60 tracking-[0.2em] uppercase">CFS &middot; Ludhiana</div>
+      </div>
+    </a>
+
+    <!-- Desktop Nav -->
+    <nav class="hidden lg:flex items-center gap-8 text-sm font-medium text-white/90">
+      <a href="/" class="hover:text-accent transition <%= active==='home' ? 'text-accent' : '' %>">Home</a>
+      <a href="/about-us" class="hover:text-accent transition <%= active==='about' ? 'text-accent' : '' %>">About Us</a>
+
+      <div class="relative group">
+        <button class="flex items-center gap-1 hover:text-accent transition">
+          Services <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
+        </button>
+        <div class="absolute left-0 top-full pt-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition w-64">
+          <div class="bg-white rounded-lg shadow-xl border border-black/5 py-2 text-navy">
+            <a href="/services" class="block px-4 py-2 text-sm hover:bg-navy/5 hover:text-accent">All Services</a>
+            <a href="/infrastructure" class="block px-4 py-2 text-sm hover:bg-navy/5 hover:text-accent">Infrastructure</a>
+            <a href="/rail-connectivity" class="block px-4 py-2 text-sm hover:bg-navy/5 hover:text-accent">Rail Connectivity</a>
+            <a href="/road-connectivity" class="block px-4 py-2 text-sm hover:bg-navy/5 hover:text-accent">Road Connectivity</a>
+          </div>
+        </div>
+      </div>
+
+      <a href="/why-choose-us" class="hover:text-accent transition <%= active==='why-choose-us' ? 'text-accent' : '' %>">Why Choose Us</a>
+      <a href="/gallery" class="hover:text-accent transition <%= active==='gallery' ? 'text-accent' : '' %>">Gallery</a>
+      <a href="/notices" class="hover:text-accent transition <%= active==='notices' ? 'text-accent' : '' %>">Notices</a>
+      <a href="/tariff" class="hover:text-accent transition <%= active==='tariff' ? 'text-accent' : '' %>">Tariff</a>
+    </nav>
+
+    <div class="hidden lg:flex items-center gap-4">
+      <a href="/contact-us" class="bg-accent hover:bg-accent/90 text-white text-sm font-semibold px-5 py-2.5 rounded-md transition">
+        Contact Us
+      </a>
+    </div>
+
+    <!-- Mobile toggle -->
+    <button id="mobile-menu-btn" class="lg:hidden text-white" aria-label="Open menu">
+      <i data-lucide="menu" class="w-7 h-7"></i>
+    </button>
+  </div>
+
+  <!-- Mobile Nav -->
+  <div id="mobile-menu" class="hidden lg:hidden bg-navy border-t border-white/10 px-5 py-4 space-y-1 text-white/90 text-sm">
+    <a href="/" class="block py-2">Home</a>
+    <a href="/about-us" class="block py-2">About Us</a>
+    <a href="/services" class="block py-2">Services</a>
+    <a href="/why-choose-us" class="block py-2">Why Choose Us</a>
+    <a href="/infrastructure" class="block py-2">Infrastructure</a>
+    <a href="/rail-connectivity" class="block py-2">Rail Connectivity</a>
+    <a href="/road-connectivity" class="block py-2">Road Connectivity</a>
+    <a href="/gallery" class="block py-2">Gallery</a>
+    <a href="/tariff" class="block py-2">Tariff</a>
+    <a href="/notices" class="block py-2">Notices</a>
+    <a href="/contact-us" class="block py-2 text-accent font-semibold">Contact Us</a>
+  </div>
+</header>

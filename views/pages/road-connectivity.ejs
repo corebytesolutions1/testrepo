@@ -1,0 +1,38 @@
+<%- include('../partials/breadcrumb', { pageTitle: 'Road Connectivity' }) %>
+
+<section class="py-24 px-5 lg:px-8 bg-white">
+  <div class="max-w-7xl mx-auto">
+    <p data-aos="fade-up" class="text-steel max-w-2xl mb-16">
+      CFS-OWPL maintains a well-established road transport network connecting Ludhiana to India's major gateway ports.
+    </p>
+
+    <div data-aos="fade-up" class="rounded-2xl bg-[#F5F7FA] p-10 md:p-16 mb-16">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+        <div class="bg-navy text-white font-heading font-bold px-6 py-4 rounded-lg text-center shrink-0">
+          <i data-lucide="warehouse" class="w-6 h-6 mx-auto mb-2 text-accent"></i>
+          CFS-OWPL<br><span class="text-white/50 font-normal text-xs">Ludhiana, Punjab</span>
+        </div>
+        <div class="trailer-track flex-1 w-full flex items-center justify-center gap-2">
+          <div class="hidden md:block flex-1 border-t-2 border-dashed border-accent/50"></div>
+          <i data-lucide="truck" class="trailer-icon w-8 h-8 text-accent shrink-0"></i>
+          <div class="hidden md:block flex-1 border-t-2 border-dashed border-accent/50"></div>
+        </div>
+        <div class="grid grid-cols-2 gap-3 shrink-0">
+          <% ports.forEach((p, i) => { %>
+            <div data-aos="fade-left" data-aos-delay="<%= i * 100 %>" class="bg-white border border-black/5 rounded-lg px-4 py-3 text-sm font-medium text-navy text-center">
+              <i data-lucide="anchor" class="w-4 h-4 mx-auto mb-1.5 text-accent"></i>
+              <%= p %>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+    </div>
+
+    <div class="rounded-2xl overflow-hidden border border-black/10 min-h-[320px] bg-[#e9edf1] flex items-center justify-center text-steel text-sm" data-aos="fade-up">
+      <div class="text-center p-8">
+        <i data-lucide="map" class="w-10 h-10 mx-auto mb-3 text-accent"></i>
+        Route Map Placeholder — Ludhiana to Major Gateway Ports
+      </div>
+    </div>
+  </div>
+</section>

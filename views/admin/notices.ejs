@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notice Board Admin | OWPL</title>
+<meta name="robots" content="noindex, nofollow">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = { theme: { extend: { colors: { navy: '#0B1E3A', accent: '#E6631E', steel: '#4A5A6A' } } } }
+</script>
+<link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
+</head>
+<body class="bg-[#F5F7FA] min-h-screen font-sans">
+
+<header class="bg-navy text-white px-6 py-5 flex items-center justify-between">
+  <div class="flex items-center gap-2">
+    <div class="w-9 h-9 rounded bg-accent flex items-center justify-center font-bold">O</div>
+    <div>
+      <div class="font-bold leading-tight">OWPL Admin</div>
+      <div class="text-xs text-white/50">Notice Board Management</div>
+    </div>
+  </div>
+  <a href="/notices" class="text-sm text-white/70 hover:text-accent transition">View Public Notice Board &rarr;</a>
+</header>
+
+<main class="max-w-5xl mx-auto px-6 py-10">
+
+  <% if (flash) { %>
+    <div class="alert bg-white border border-accent/30 rounded-lg px-5 py-3 mb-8 text-sm text-navy shadow-sm flex items-center gap-2">
+      <i data-lucide="check-circle" class="w-4 h-4 text-accent"></i> <%= flash %>
+    </div>
+  <% } %>
+
+  <!-- Upload form -->
+  <div class="bg-white rounded-xl shadow-sm p-8 mb-10">
+    <h2 class="font-bold text-lg text-navy mb-6">Publish a New Notice</h2>
+    <form action="/admin/notices" method="POST" enctype="multipart/form-data" class="grid sm:grid-cols-2 gap-5">
+      <div class="sm:col-span-2">
+        <label class="text-sm font-medium text-navy mb-1.5 block">Title *</label>
+        <input type="text" name="title" required class="input input-bordered w-full">
+      </div>
+      <div>
+        <label class="text-sm font-medium text-navy mb-1.5 block">Date *</label>
+        <input type="date" name="date" required class="input input-bordered w-full">
+      </div>
+      <div>
+        <label class="text-sm font-medium text-navy mb-1.5 block">Time</label>
+        <input type="time" name="time" class="input input-bordered w-full">
+      </div>
+      <div>
+        <label class="text-sm font-medium text-navy mb-1.5 block">Category</label>
+        <select name="category" class="select select-bordered w-full">
+          <option>Tariff</option>
+          <option>Operations</option>
+          <option>Customs</option>
+          <option>General</option>
+        </select>
+      </div>
+      <div class="flex items-end pb-2.5">
+        <label class="flex items-center gap-2 cursor-pointer text-sm text-navy">
+          <input type="checkbox" name="pinned" class="checkbox checkbox-sm"> Pin this notice to the top
+        </label>
+      </div>
+      <div class="sm:col-span-2">
+        <label class="text-sm font-medium text-navy mb-1.5 block">Description</label>
+        <textarea name="description" rows="3" class="textarea textarea-bordered w-full"></textarea>
+      </div>
+      <div class="sm:col-span-2">
+        <label class="text-sm font-medium text-navy mb-1.5 block">PDF Attachment</label>
+        <input type="file" name="attachment" accept="application/pdf" class="file-input file-input-bordered w-full">
+        <p class="text-xs text-steel mt-1">PDF only, up to 10MB. Saved to /pdf and linked automatically.</p>
+      </div>
+      <div class="sm:col-span-2">
+        <button type="submit" class="btn bg-accent hover:bg-accent/90 border-none text-white">
+          <i data-lucide="upload" class="w-4 h-4"></i> Publish Notice
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Existing notices -->
+  <div class="bg-white rounded-xl shadow-sm p-8">
+    <h2 class="font-bold text-lg text-navy mb-6">Published Notices (<%= notices.length %>)</h2>
+    <div class="space-y-4">
+      <% notices.forEach(n => { %>
+        <div class="border border-black/5 rounded-lg p-5 flex flex-wrap items-start justify-between gap-4">
+          <div class="flex-1 min-w-[240px]">
+            <div class="flex items-center gap-2 mb-1.5 flex-wrap">
+              <% if (n.pinned) { %><span class="badge badge-sm bg-accent text-white border-none">Pinned</span><% } %>
+              <span class="badge badge-sm badge-ghost"><%= n.category %></span>
+              <span class="text-xs text-steel"><%= n.date %> &middot; <%= n.time %></span>
+            </div>
+            <p class="font-semibold text-navy"><%= n.title %></p>
+            <% if (n.pdf) { %>
+              <a href="<%= n.pdf %>" class="text-accent text-xs hover:underline" target="_blank">View attached PDF</a>
+            <% } else { %>
+              <span class="text-xs text-steel/60">No attachment</span>
+            <% } %>
+          </div>
+          <div class="flex gap-2 shrink-0">
+            <form action="/admin/notices/<%= n.id %>/pin" method="POST">
+              <button class="btn btn-sm btn-outline"><%= n.pinned ? "Unpin" : "Pin" %></button>
+            </form>
+            <form action="/admin/notices/<%= n.id %>/delete" method="POST" onsubmit="return confirm('Delete this notice?');">
+              <button class="btn btn-sm btn-outline btn-error">Delete</button>
+            </form>
+          </div>
+        </div>
+      <% }) %>
+      <% if (!notices.length) { %>
+        <p class="text-steel text-sm text-center py-8">No notices published yet.</p>
+      <% } %>
+    </div>
+  </div>
+</main>
+
+<script>window.addEventListener('load', () => lucide.createIcons());</script>
+</body>
+</html>

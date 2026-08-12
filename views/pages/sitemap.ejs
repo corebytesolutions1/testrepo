@@ -1,0 +1,18 @@
+<%- include('../partials/breadcrumb', { pageTitle: 'Sitemap' }) %>
+<section class="py-24 px-5 lg:px-8 bg-white">
+  <div class="max-w-3xl mx-auto grid sm:grid-cols-2 gap-x-10 gap-y-3 text-sm" data-aos="fade-up">
+    <% const links = [
+      ["/", "Home"], ["/about-us", "About Us"], ["/services", "Services"],
+      ["/why-choose-us", "Why Choose Us"], ["/infrastructure", "Infrastructure"],
+      ["/rail-connectivity", "Rail Connectivity"], ["/road-connectivity", "Road Connectivity"],
+      ["/gallery", "Image Gallery"], ["/tariff", "Tariff"], ["/notices", "Notice Board"],
+      ["/contact-us", "Contact Us"], ["/privacy-policy", "Privacy Policy"],
+      ["/terms-and-conditions", "Terms & Conditions"], ["/sitemap", "Sitemap"]
+    ]; %>
+    <% links.forEach(l => { %>
+      <a href="<%= l[0] %>" class="flex items-center gap-2 text-steel hover:text-accent transition py-2 border-b border-black/5">
+        <i data-lucide="chevron-right" class="w-4 h-4 text-accent"></i><%= l[1] %>
+      </a>
+    <% }) %>
+  </div>
+</section>

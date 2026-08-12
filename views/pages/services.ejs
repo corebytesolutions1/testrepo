@@ -1,0 +1,22 @@
+<%- include('../partials/breadcrumb', { pageTitle: 'Our Services' }) %>
+
+<section class="py-24 px-5 lg:px-8 bg-white">
+  <div class="max-w-7xl mx-auto">
+    <p data-aos="fade-up" class="text-steel max-w-2xl mb-14">
+      <%= site.companyName %> provides a complete suite of CFS, warehousing, and EXIM logistics services — engineered to move cargo reliably from factory floor to gateway port.
+    </p>
+    <div class="grid md:grid-cols-2 gap-6">
+      <% services.forEach((s, i) => { %>
+        <div id="<%= s.slug %>" data-aos="fade-up" data-aos-delay="<%= (i % 2) * 100 %>" class="scroll-mt-28 flex gap-5 p-8 rounded-xl border border-black/5 hover:border-accent/40 hover:shadow-xl transition-all">
+          <div class="w-14 h-14 shrink-0 rounded-lg bg-navy/5 flex items-center justify-center">
+            <i data-lucide="<%= s.icon %>" class="w-7 h-7 text-accent"></i>
+          </div>
+          <div>
+            <h3 class="font-heading font-semibold text-lg text-navy mb-2"><%= s.title %></h3>
+            <p class="text-steel text-sm leading-relaxed"><%= s.description %></p>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+</section>

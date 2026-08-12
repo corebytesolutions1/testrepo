@@ -1,0 +1,62 @@
+<footer class="bg-navy text-white/80 pt-16 pb-8">
+  <div class="max-w-7xl mx-auto px-5 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-10">
+
+    <div>
+      <div class="flex items-center gap-2 mb-4">
+        <div class="w-9 h-9 rounded bg-accent flex items-center justify-center font-heading font-extrabold text-white">O</div>
+        <span class="font-heading font-bold text-white text-lg">OWPL</span>
+      </div>
+      <p class="text-sm leading-relaxed text-white/60">
+        <%= site.companyName %> operates <%= site.cfsName %> — North India's first private Container Freight Station, serving EXIM trade since <%= site.established %>.
+      </p>
+      <div class="flex gap-3 mt-5">
+        <a href="<%= site.social.linkedin %>" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-accent transition"><i data-lucide="linkedin" class="w-4 h-4"></i></a>
+        <a href="<%= site.social.facebook %>" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-accent transition"><i data-lucide="facebook" class="w-4 h-4"></i></a>
+        <a href="<%= site.social.twitter %>" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-accent transition"><i data-lucide="twitter" class="w-4 h-4"></i></a>
+        <a href="<%= site.social.youtube %>" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-accent transition"><i data-lucide="youtube" class="w-4 h-4"></i></a>
+      </div>
+    </div>
+
+    <div>
+      <h4 class="font-heading font-semibold text-white mb-4 text-sm tracking-wide uppercase">Quick Links</h4>
+      <ul class="space-y-2 text-sm">
+        <li><a href="/about-us" class="hover:text-accent transition">About Us</a></li>
+        <li><a href="/infrastructure" class="hover:text-accent transition">Infrastructure</a></li>
+        <li><a href="/gallery" class="hover:text-accent transition">Image Gallery</a></li>
+        <li><a href="/tariff" class="hover:text-accent transition">Tariff</a></li>
+        <li><a href="/notices" class="hover:text-accent transition">Notice Board</a></li>
+        <li><a href="/sitemap" class="hover:text-accent transition">Sitemap</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h4 class="font-heading font-semibold text-white mb-4 text-sm tracking-wide uppercase">Services</h4>
+      <ul class="space-y-2 text-sm">
+        <li><a href="/services#container-freight-station" class="hover:text-accent transition">Container Freight Station</a></li>
+        <li><a href="/services#public-bonded-warehouse" class="hover:text-accent transition">Bonded Warehouse</a></li>
+        <li><a href="/services#general-warehousing" class="hover:text-accent transition">General Warehousing</a></li>
+        <li><a href="/rail-connectivity" class="hover:text-accent transition">Rail Logistics</a></li>
+        <li><a href="/road-connectivity" class="hover:text-accent transition">Road Logistics</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h4 class="font-heading font-semibold text-white mb-4 text-sm tracking-wide uppercase">Contact</h4>
+      <ul class="space-y-3 text-sm">
+        <li class="flex gap-2"><i data-lucide="map-pin" class="w-4 h-4 mt-0.5 text-accent shrink-0"></i><span><%= site.address.line1 %>, <%= site.address.city %>, <%= site.address.state %>, <%= site.address.country %></span></li>
+        <li class="flex gap-2"><i data-lucide="mail" class="w-4 h-4 mt-0.5 text-accent shrink-0"></i><a href="mailto:<%= site.email %>" class="hover:text-accent transition"><%= site.email %></a></li>
+        <li class="flex gap-2"><i data-lucide="phone" class="w-4 h-4 mt-0.5 text-accent shrink-0"></i><span><%= site.phonePlaceholder %></span></li>
+        <li class="flex gap-2"><i data-lucide="clock" class="w-4 h-4 mt-0.5 text-accent shrink-0"></i><span>Mon – Sat: 9:00 AM – 6:00 PM</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-5 lg:px-8 mt-12 pt-6 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-white/50">
+    <p>&copy; <%= new Date().getFullYear() %> <%= site.companyName %>. All rights reserved.</p>
+    <div class="flex gap-5">
+      <a href="/privacy-policy" class="hover:text-accent transition">Privacy Policy</a>
+      <a href="/terms-and-conditions" class="hover:text-accent transition">Terms &amp; Conditions</a>
+      <a href="/sitemap" class="hover:text-accent transition">Sitemap</a>
+    </div>
+  </div>
+</footer>

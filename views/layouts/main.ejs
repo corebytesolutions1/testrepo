@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><%= meta.title %></title>
+<meta name="description" content="<%= meta.description %>">
+<% if (meta.keywords) { %><meta name="keywords" content="<%= meta.keywords %>"><% } %>
+<link rel="canonical" href="<%= meta.canonical %>">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="<%= site.colors.navy %>">
+
+<!-- OpenGraph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="<%= meta.title %>">
+<meta property="og:description" content="<%= meta.description %>">
+<meta property="og:url" content="<%= meta.canonical %>">
+<meta property="og:site_name" content="<%= site.companyName %>">
+<meta property="og:image" content="<%= site.url %>/images/og-cover.jpg">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="<%= meta.title %>">
+<meta name="twitter:description" content="<%= meta.description %>">
+<meta name="twitter:image" content="<%= site.url %>/images/og-cover.jpg">
+
+<!-- Structured Data: Organization -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "<%= site.companyName %>",
+  "alternateName": "<%= site.shortName %>",
+  "url": "<%= site.url %>",
+  "email": "<%= site.email %>",
+  "foundingDate": "<%= site.established %>",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "<%= site.address.line1 %>",
+    "addressLocality": "<%= site.address.city %>",
+    "addressRegion": "<%= site.address.state %>",
+    "addressCountry": "IN"
+  }
+}
+</script>
+<!-- Structured Data: LocalBusiness -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "<%= site.cfsName %> - <%= site.companyName %>",
+  "image": "<%= site.url %>/images/og-cover.jpg",
+  "url": "<%= site.url %>",
+  "telephone": "<%= site.phonePlaceholder %>",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "<%= site.address.line1 %>",
+    "addressLocality": "<%= site.address.city %>",
+    "addressRegion": "<%= site.address.state %>",
+    "addressCountry": "IN"
+  }
+}
+</script>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+
+<!-- Tailwind (CDN for now — swap for a compiled build in production, see README) -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          navy: '<%= site.colors.navy %>',
+          steel: '<%= site.colors.steel %>',
+          accent: '<%= site.colors.orange %>'
+        },
+        fontFamily: {
+          heading: ['Sora', 'sans-serif'],
+          body: ['Manrope', 'sans-serif']
+        }
+      }
+    }
+  }
+</script>
+
+<!-- AOS animation library -->
+<link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+<!-- daisyUI (Tailwind component classes — no build step needed) -->
+<link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css">
+
+<!-- Lucide Icons -->
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
+
+<!-- GSAP + ScrollTrigger (used for the container drop/stack scroll animation) -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+<!-- tsParticles (particle background — standard, maintained replacement; see chat note on "Casberry") -->
+<script src="https://cdn.jsdelivr.net/npm/@tsparticles/all@3/tsparticles.all.bundle.min.js"></script>
+
+<link rel="stylesheet" href="/css/style.css">
+<link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+</head>
+<body class="font-body bg-white text-navy antialiased">
+
+<%- include('../partials/preloader') %>
+<%- include('../partials/header') %>
+
+<main><%- body %></main>
+
+<%- include('../partials/footer') %>
+
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+<script src="/js/main.js"></script>
+</body>
+</html>

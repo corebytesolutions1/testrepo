@@ -1,0 +1,32 @@
+<%- include('../partials/breadcrumb', { pageTitle: 'Infrastructure' }) %>
+
+<section class="py-24 px-5 lg:px-8 bg-white">
+  <div class="max-w-7xl mx-auto">
+    <p data-aos="fade-up" class="text-steel max-w-2xl mb-14">
+      CFS-OWPL's infrastructure is built to handle high cargo volumes efficiently, securely, and with full customs compliance.
+    </p>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% const infra = [
+        ["warehouse", "Warehouse", "Covered warehousing for bonded and general cargo storage."],
+        ["layout-grid", "Yard", "Expansive paved yard for container staging and movement."],
+        ["container", "Containers", "High-capacity stacking for laden and empty containers."],
+        ["forklift", "Cargo Handling Equipment", "Modern mechanized equipment for fast, safe handling."],
+        ["building-2", "Office", "On-site administrative and operations office."],
+        ["shield", "Customs Area", "Dedicated customs examination and clearance zone."],
+        ["plane", "Future Drone Imagery", "Aerial facility documentation — coming soon."],
+        ["video", "Future Facility Videos", "Video walkthroughs of the CFS facility — coming soon."]
+      ]; %>
+      <% infra.forEach((item, i) => { %>
+        <div data-aos="fade-up" data-aos-delay="<%= (i % 3) * 100 %>" class="rounded-xl overflow-hidden border border-black/5 group">
+          <div class="h-44 bg-[#e9edf1] flex items-center justify-center">
+            <i data-lucide="<%= item[0] %>" class="<%= item[0] === 'forklift' ? 'crane-sway' : '' %> w-10 h-10 text-navy/30"></i>
+          </div>
+          <div class="p-6">
+            <h3 class="font-heading font-semibold text-navy mb-1.5"><%= item[1] %></h3>
+            <p class="text-steel text-sm leading-relaxed"><%= item[2] %></p>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,67 @@
+<%- include('../partials/breadcrumb', { pageTitle: 'About Us' }) %>
+
+<section class="py-24 px-5 lg:px-8 bg-white">
+  <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-14 items-center mb-24">
+    <div data-aos="fade-right">
+      <p class="text-accent font-semibold tracking-[0.2em] uppercase text-xs mb-3">Our Story</p>
+      <h2 class="font-heading font-bold text-3xl md:text-4xl text-navy mb-5">Punjab's First Private Container Freight Station</h2>
+      <p class="text-steel leading-relaxed mb-4">
+        Established in <%= site.established %>, <%= site.cfsName %> was the first privately operated Container Freight Station in Punjab — a milestone that shaped how EXIM cargo moves through North India.
+      </p>
+      <p class="text-steel leading-relaxed">
+        For more than <%= site.yearsOfExcellence %> years, <%= site.companyName %> has provided complete EXIM cargo movement and end-to-end logistics support, from factory to gateway port, for exporters and importers across <%= site.regionsServed.join(", ") %>.
+      </p>
+    </div>
+    <img data-aos="fade-left" src="/images/placeholder-facility.jpg" alt="CFS-OWPL facility" class="rounded-xl w-full h-96 object-cover" loading="lazy">
+  </div>
+
+  <!-- Vision / Mission -->
+  <div class="grid md:grid-cols-2 gap-6 mb-24">
+    <div data-aos="fade-up" class="p-10 rounded-xl bg-[#F5F7FA]">
+      <i data-lucide="telescope" class="w-8 h-8 text-accent mb-4"></i>
+      <h3 class="font-heading font-bold text-xl text-navy mb-3">Our Vision</h3>
+      <p class="text-steel leading-relaxed text-sm">To be North India's most trusted Container Freight Station, recognized for infrastructure, reliability, and service excellence in EXIM logistics.</p>
+    </div>
+    <div data-aos="fade-up" data-aos-delay="100" class="p-10 rounded-xl bg-[#F5F7FA]">
+      <i data-lucide="target" class="w-8 h-8 text-accent mb-4"></i>
+      <h3 class="font-heading font-bold text-xl text-navy mb-3">Our Mission</h3>
+      <p class="text-steel leading-relaxed text-sm">To deliver seamless, efficient, and secure cargo handling and warehousing solutions that empower exporters and importers across the region.</p>
+    </div>
+  </div>
+
+  <!-- Chairman's Message Placeholder -->
+  <div data-aos="fade-up" class="rounded-2xl bg-navy text-white p-10 md:p-14 grid md:grid-cols-3 gap-10 items-center mb-24">
+    <div class="w-32 h-32 rounded-full bg-white/10 mx-auto md:mx-0"></div>
+    <div class="md:col-span-2">
+      <i data-lucide="quote" class="w-8 h-8 text-accent mb-4"></i>
+      <p class="text-white/70 leading-relaxed italic mb-4">
+        "Chairman's message placeholder — a short note on the company's journey, values, and commitment to serving the trade community, to be added here."
+      </p>
+      <p class="font-heading font-semibold">Chairman, <%= site.companyName %></p>
+    </div>
+  </div>
+
+  <!-- Timeline -->
+  <div data-aos="fade-up" class="text-center max-w-2xl mx-auto mb-14">
+    <p class="text-accent font-semibold tracking-[0.2em] uppercase text-xs mb-3">Our Journey</p>
+    <h2 class="font-heading font-bold text-3xl md:text-4xl text-navy">Milestones Since <%= site.established %></h2>
+  </div>
+  <div class="max-w-3xl mx-auto space-y-8">
+    <% const milestones = [
+      [site.established, "CFS-OWPL established as Punjab's first private Container Freight Station."],
+      ["2005", "Expanded warehousing capacity to serve growing EXIM demand."],
+      ["2012", "Strengthened multi-railhead rail connectivity for faster cargo movement."],
+      ["2018", "Enhanced bonded warehousing and yard infrastructure."],
+      ["Present", "Serving exporters and importers across Punjab, Himachal Pradesh & Jammu with 25+ years of operational excellence."]
+    ]; %>
+    <% milestones.forEach((m, i) => { %>
+      <div data-aos="fade-up" data-aos-delay="<%= i * 80 %>" class="flex gap-6">
+        <div class="w-20 shrink-0 text-right font-heading font-bold text-accent"><%= m[0] %></div>
+        <div class="w-px bg-navy/10 relative">
+          <div class="absolute -left-[5px] top-1 w-2.5 h-2.5 rounded-full bg-accent"></div>
+        </div>
+        <p class="text-steel text-sm leading-relaxed pb-2"><%= m[1] %></p>
+      </div>
+    <% }) %>
+  </div>
+</section>

@@ -1,0 +1,24 @@
+<%- include('../partials/breadcrumb', { pageTitle: 'Terms & Conditions' }) %>
+<section class="py-24 px-5 lg:px-8 bg-white">
+  <div class="max-w-3xl mx-auto prose prose-sm text-steel leading-relaxed" data-aos="fade-up">
+    <p class="text-xs text-steel/70 mb-8">Last updated: July 2026</p>
+
+    <h3 class="font-heading font-semibold text-navy text-lg mb-2">1. Acceptance of Terms</h3>
+    <p class="mb-6">By accessing this website, you agree to be bound by these Terms & Conditions. If you do not agree, please discontinue use of the site.</p>
+
+    <h3 class="font-heading font-semibold text-navy text-lg mb-2">2. Use of Content</h3>
+    <p class="mb-6">All content on this website, including text, images, and graphics, is the property of <%= site.companyName %> unless otherwise stated, and may not be reproduced without permission.</p>
+
+    <h3 class="font-heading font-semibold text-navy text-lg mb-2">3. Service Information</h3>
+    <p class="mb-6">Information about CFS, warehousing, and logistics services on this website is provided for general informational purposes and does not constitute a binding offer. Please contact us directly for service agreements and tariffs.</p>
+
+    <h3 class="font-heading font-semibold text-navy text-lg mb-2">4. Limitation of Liability</h3>
+    <p class="mb-6"><%= site.companyName %> shall not be liable for any indirect, incidental, or consequential damages arising from use of this website.</p>
+
+    <h3 class="font-heading font-semibold text-navy text-lg mb-2">5. Governing Law</h3>
+    <p class="mb-6">These terms are governed by the laws of India, with jurisdiction in <%= site.address.city %>, <%= site.address.state %>.</p>
+
+    <h3 class="font-heading font-semibold text-navy text-lg mb-2">6. Contact</h3>
+    <p>For questions about these terms, contact us at <a href="mailto:<%= site.email %>" class="text-accent"><%= site.email %></a>.</p>
+  </div>
+</section>
