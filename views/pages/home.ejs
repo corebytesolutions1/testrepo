@@ -195,7 +195,7 @@
           <p class="text-xs text-steel mb-2"><%= n.category %> &middot; <%= new Date(n.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) %></p>
           <h3 class="font-heading font-semibold text-navy mb-2 pr-10"><%= n.title %></h3>
           <p class="text-steel text-sm leading-relaxed mb-4"><%= n.description %></p>
-          <a href="<%= n.pdf %>" class="inline-flex items-center gap-1.5 text-accent text-sm font-semibold hover:gap-2.5 transition-all">
+          <a href="<%= n.pdf %>" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-accent text-sm font-semibold hover:gap-2.5 transition-all">
             <i data-lucide="download" class="w-3.5 h-3.5"></i> Download
           </a>
         </div>

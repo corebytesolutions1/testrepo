@@ -5,7 +5,7 @@
 
     <!-- Filters -->
     <div data-aos="fade-up" class="flex flex-wrap gap-3 mb-12" id="gallery-filters">
-      <% ["All","Warehouses","Infrastructure","Cargo","Containers","Events","Office"].forEach((cat, i) => { %>
+      <% ["Images"].forEach((cat, i) => { %>
         <button class="filter-btn <%= i === 0 ? 'bg-accent text-white' : 'bg-[#F5F7FA] text-navy hover:bg-navy/10' %> text-sm font-medium px-5 py-2.5 rounded-full transition" data-filter="<%= cat.toLowerCase() %>"><%= cat %></button>
       <% }) %>
     </div>
@@ -13,15 +13,15 @@
     <!-- Grid -->
     <div id="gallery-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
       <% const items = [
-        ["Warehouses","placeholder-warehouse.jpg","Bonded warehouse interior"],
-        ["Infrastructure","placeholder-yard.jpg","Container yard overview"],
-        ["Containers","placeholder-containers.jpg","Stacked containers"],
-        ["Office","placeholder-office.jpg","Administrative office"],
-        ["Cargo","placeholder-facility.jpg","Cargo handling area"],
-        ["Warehouses","placeholder-warehouse.jpg","General warehousing space"],
-        ["Infrastructure","placeholder-yard.jpg","Customs examination zone"],
-        ["Containers","placeholder-containers.jpg","Laden container storage"],
-        ["Events","placeholder-office.jpg","Company milestone event"]
+        ["Main Gate","main-gate.jpg","Main Gate"],
+        ["Godown","Godown.jpg","Godown overview"],
+        ["Cargo","cargo.jpg","Cargo handling area"],
+        ["General Warehouse","Godown1.jpeg","General warehousing space"],
+        ["Weightbridge","weightbrigde.jpg","Customs examination zone"],
+        ["Yard","Yard1.jpg","Yard"],
+        ["Yard-2","Yard.jpg","Yard"],
+        ["Exim Godown","exim.jpg","Exim Godown"],
+        ["Yard-3","yard3.jpg","Yard-3"],
       ]; %>
       <% items.forEach((it, i) => { %>
         <button data-aos="fade-up" data-aos-delay="<%= (i % 3) * 80 %>" class="gallery-item text-left rounded-xl overflow-hidden group relative" data-category="<%= it[0].toLowerCase() %>" data-src="/images/<%= it[1] %>" data-caption="<%= it[2] %>">

@@ -25,6 +25,13 @@
   <a href="/notices" class="text-sm text-white/70 hover:text-accent transition">View Public Notice Board &rarr;</a>
 </header>
 
+<div class="max-w-5xl mx-auto px-6 pt-6">
+  <div class="flex items-center gap-2 text-xs <%= cloudEnabled ? 'text-green-700' : 'text-steel' %>">
+    <i data-lucide="<%= cloudEnabled ? 'cloud' : 'hard-drive' %>" class="w-3.5 h-3.5"></i>
+    <%= cloudEnabled ? "Cloud storage (S3) active — uploads will persist on serverless hosts like Vercel." : "Local disk storage — fine for a normal server, but uploads will NOT persist on Vercel/serverless. See README for S3 setup." %>
+  </div>
+</div>
+
 <main class="max-w-5xl mx-auto px-6 py-10">
 
   <% if (flash) { %>
@@ -82,7 +89,7 @@
 
   <!-- Existing notices -->
   <div class="bg-white rounded-xl shadow-sm p-8">
-    <h2 class="font-bold text-lg text-navy mb-6">Published Notices (<%= notices.length %>)</h2>
+    <h2 class="font-bold text-lg text-navy mb-6">Published Notices (<%= totalCount %>)</h2>
     <div class="space-y-4">
       <% notices.forEach(n => { %>
         <div class="border border-black/5 rounded-lg p-5 flex flex-wrap items-start justify-between gap-4">
@@ -94,16 +101,16 @@
             </div>
             <p class="font-semibold text-navy"><%= n.title %></p>
             <% if (n.pdf) { %>
-              <a href="<%= n.pdf %>" class="text-accent text-xs hover:underline" target="_blank">View attached PDF</a>
+              <a href="<%= n.pdf %>" class="text-accent text-xs hover:underline" target="_blank" rel="noopener noreferrer">View attached PDF</a>
             <% } else { %>
               <span class="text-xs text-steel/60">No attachment</span>
             <% } %>
           </div>
           <div class="flex gap-2 shrink-0">
-            <form action="/admin/notices/<%= n.id %>/pin" method="POST">
+            <form action="/admin/notices/<%= n.id %>/pin?page=<%= currentPage %>" method="POST">
               <button class="btn btn-sm btn-outline"><%= n.pinned ? "Unpin" : "Pin" %></button>
             </form>
-            <form action="/admin/notices/<%= n.id %>/delete" method="POST" onsubmit="return confirm('Delete this notice?');">
+            <form action="/admin/notices/<%= n.id %>/delete?page=<%= currentPage %>" method="POST" onsubmit="return confirm('Delete this notice? Its PDF will also be removed.');">
               <button class="btn btn-sm btn-outline btn-error">Delete</button>
             </form>
           </div>
@@ -113,6 +120,16 @@
         <p class="text-steel text-sm text-center py-8">No notices published yet.</p>
       <% } %>
     </div>
+
+    <% if (totalPages > 1) { %>
+      <div class="flex items-center justify-center gap-2 mt-8">
+        <a href="/admin/notices?page=<%= Math.max(1, currentPage - 1) %>" class="btn btn-sm btn-outline <%= currentPage === 1 ? 'btn-disabled' : '' %>">Prev</a>
+        <% for (let p = 1; p <= totalPages; p++) { %>
+          <a href="/admin/notices?page=<%= p %>" class="btn btn-sm <%= p === currentPage ? 'bg-accent text-white border-none' : 'btn-outline' %>"><%= p %></a>
+        <% } %>
+        <a href="/admin/notices?page=<%= Math.min(totalPages, currentPage + 1) %>" class="btn btn-sm btn-outline <%= currentPage === totalPages ? 'btn-disabled' : '' %>">Next</a>
+      </div>
+    <% } %>
   </div>
 </main>
 

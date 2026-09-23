@@ -91,6 +91,82 @@ Notices can now be published without touching code:
 
 This uses flat-file storage (`data/notices.json`) and simple Basic Auth — intentionally lightweight so it works out of the box. Before exposing this publicly on the internet, put it behind HTTPS (Basic Auth sends credentials base64-encoded, not encrypted) and consider swapping to a real database + session-based login if more than one person will manage notices.
 
+### Storage lifecycle (what happens as PDFs pile up)
+
+- **Deleting a notice now also deletes its PDF file** (locally, or from your S3 bucket if cloud storage is enabled) — no more orphaned files piling up on disk.
+- **The admin list is paginated** (10 per page) so it stays fast and readable even with hundreds of notices.
+- **`public/pdf/` and `public/uploads/` are gitignored** — uploaded files are runtime data, not source code, and should never bloat your git history. `.gitkeep` files keep the folders present in a fresh clone.
+- Disk usage on the app itself is otherwise unaffected either way — PDFs are served as static files, never loaded into memory or processed by the app.
+
+### Cloud storage for PDF uploads (required for Vercel/serverless)
+
+`utils/storage.js` supports two backends:
+
+- **Local disk** (default) — writes to `public/pdf/`. Fine for a normal server, a VPS, or localhost. **Will NOT work on Vercel or other serverless hosts** — their filesystem is read-only outside `/tmp`, and `/tmp` is wiped between invocations, so anything uploaded through the admin panel vanishes.
+- **S3-compatible cloud storage** (opt-in) — set the `S3_*` variables in `.env` (see `.env.example`) and uploads go to a real bucket instead. Works with AWS S3, Cloudflare R2, Backblaze B2, or anything else S3-compatible. Run `npm install @aws-sdk/client-s3` once you enable this.
+
+If you're deploying to Vercel, cloud storage isn't optional — configure it before relying on the upload form there.
+
+**A note on "free" providers and credit cards:** Backblaze B2, Cloudflare R2, and Vercel Blob all require a payment method on file as an anti-abuse measure, even though usage within their free tier costs $0. If you'd rather avoid that, use **Supabase Storage** instead (below) — genuinely free, no card required, and it has an S3-compatible API so it works with the exact same code, no changes needed.
+
+### Supabase Storage setup (step by step) — no credit card required
+
+1. Create a free project at [supabase.com](https://supabase.com) (email signup only, no card).
+2. In the project, go to **Storage** → **Create a new bucket**. Name it (e.g. `owpl-notices`) and toggle it **Public** — same reasoning as below: these are non-sensitive tariff/notice PDFs, and Public means direct links work without extra signing code.
+3. Go to **Storage → Settings** (or **Project Settings → Storage**, depending on Supabase's current UI) and enable/find the **S3 Connection** section. Generate **S3 Access Keys** there — this gives you an Access Key ID and Secret Access Key.
+4. Note your **Project Reference** (visible in the project URL, e.g. `abcdefghijk` in `https://abcdefghijk.supabase.co`) and your **Project Region** (Project Settings → General).
+5. Fill in `.env`:
+   ```
+   S3_BUCKET=owpl-notices
+   S3_REGION=<your project region, e.g. us-east-1>
+   S3_ACCESS_KEY_ID=<from step 3>
+   S3_SECRET_ACCESS_KEY=<from step 3>
+   S3_ENDPOINT=https://<project-ref>.supabase.co/storage/v1/s3
+   S3_PUBLIC_URL_BASE=https://<project-ref>.supabase.co/storage/v1/object/public/owpl-notices
+   ```
+   Unlike Backblaze, **`S3_PUBLIC_URL_BASE` must be set explicitly here** — Supabase's public file URLs don't follow the generic virtual-hosted-style pattern the code defaults to, so leaving it blank would produce broken links. Use the endpoint exactly as `https://<project-ref>.supabase.co/storage/v1/s3` — Supabase's own dashboard sometimes shows a `<project-ref>.storage.supabase.co` variant, but the plain form above is the one documented to work with generic S3 SDKs; if you copy the other variant and hit a TLS/SSL handshake error, switch to this one.
+6. `npm install @aws-sdk/client-s3`
+7. `npm run dev`, visit `/admin/notices`, publish a test notice with a PDF, and confirm the link opens correctly and points to your Supabase project's URL.
+8. If deploying to Vercel, add the same `S3_*` variables in the Vercel project's environment variable settings.
+
+**If you hit `write EPROTO ... SSL routines:ssl3_read_bytes:... SSL alert number 40` (handshake failure):** this means the S3 client tried "virtual-hosted-style" addressing (`bucket-name.your-endpoint`), which Supabase's S3 gateway doesn't support — there's no valid TLS certificate for that made-up hostname. `utils/storage.js` sets `forcePathStyle: true` specifically to prevent this; if you're still seeing it, double-check you're running the current version of that file and that `S3_ENDPOINT` doesn't already have a bucket name prepended to it.
+
+### Backblaze B2 setup (step by step)
+
+1. In the B2 console, go to **Buckets → Create a Bucket**.
+   - Bucket name must be globally unique across all Backblaze accounts — something like `yourcompany-owpl-notices` rather than just `owpl-notices`.
+   - Set **Files in Bucket** to **Public** — the notice/tariff PDFs aren't sensitive, and Public means the site can link straight to them (matches how the code already works). Private would require generating signed URLs on every request, which isn't built.
+   - Leave Default Encryption and Object Lock off (not needed here).
+2. After creation, open the bucket and note the **Endpoint** shown, e.g. `s3.us-west-004.backblazeb2.com`. The part between `s3.` and `.backblazeb2.com` (e.g. `us-west-004`) is your region.
+3. Go to **Application Keys → Add a New Application Key**.
+   - Name it something like `owpl-website`.
+   - Under **Allow access to Bucket(s)**, restrict it to the bucket you just created (not "All").
+   - Leave capabilities at the default (read + write + delete) — the admin panel's delete-on-remove feature needs delete access.
+   - Click **Create New Key**. The `keyID` and `applicationKey` are shown **once** — copy them straight into your `.env` file, not anywhere else (don't paste the `applicationKey` into chat, a doc, or commit it to git).
+4. Fill in `.env`:
+   ```
+   S3_BUCKET=yourcompany-owpl-notices
+   S3_REGION=us-west-004
+   S3_ACCESS_KEY_ID=<the keyID from step 3>
+   S3_SECRET_ACCESS_KEY=<the applicationKey from step 3>
+   S3_ENDPOINT=https://s3.us-west-004.backblazeb2.com
+   ```
+   (Leave `S3_PUBLIC_URL_BASE` blank — `utils/storage.js` derives the public URL from `S3_ENDPOINT` automatically.)
+5. `npm install @aws-sdk/client-s3`
+6. `npm run dev`, visit `/admin/notices`, and publish a test notice with a PDF. The banner at the top of the admin page should switch to "Cloud storage (S3) active," and the notice's "View attached PDF" link should point to your B2 bucket's URL and open the file in a new tab.
+7. If deploying to Vercel, add the same `S3_*` variables in the Vercel project's environment variable settings (not `.env` — Vercel doesn't read that file).
+
+## Deploying to Vercel
+
+This is a plain Express app (`app.listen()`), not a Next.js project, so Vercel needs to be told explicitly how to run it — otherwise some routes may 404 or behave inconsistently even while others "work":
+
+1. **`vercel.json`** (included) tells Vercel to treat `server.js` as a serverless function and route every request through it.
+2. **`server.js`** now exports the app (`module.exports = app`) and only calls `app.listen()` when run directly — Vercel imports the export and calls it per-request itself; it never runs `app.listen()`.
+3. **Set your environment variables** in the Vercel project settings (Settings → Environment Variables) — `.env` files aren't read on Vercel. At minimum: `ADMIN_USER`, `ADMIN_PASSWORD`, and the `S3_*` cloud storage variables (see above — required here, since local disk uploads won't persist).
+4. Redeploy after adding `vercel.json` and the env vars — a deploy from before these existed won't pick them up retroactively.
+
+If `/admin/notices` (or any route) still 404s after this, check the Vercel deployment's build/function logs — that will show whether the function is erroring out (e.g. a missing env var) rather than the route being unreachable.
+
 ## Adding Future Modules
 
 The brief calls out a long list of future features (container tracking, customer/employee portals, invoice downloads, blog, careers, etc.). These are intentionally **not built yet** — building them now would mean guessing at requirements. Instead:

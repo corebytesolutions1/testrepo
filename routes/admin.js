@@ -1,23 +1,16 @@
 const express = require("express");
 const multer = require("multer");
-const path = require("path");
 const router = express.Router();
 
 const adminAuth = require("../middleware/adminAuth");
 const admin = require("../controllers/adminController");
 
-// PDFs are saved straight into public/pdf/ so they're immediately served
-// at /pdf/<filename> — same folder the tariff page + notice downloads use.
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, path.join(__dirname, "..", "public", "pdf")),
-  filename: (req, file, cb) => {
-    const safeName = `${Date.now()}-${file.originalname.replace(/[^a-zA-Z0-9.\-_]/g, "_")}`;
-    cb(null, safeName);
-  }
-});
-
+// Files are held in memory, then handed to utils/storage.js, which writes
+// to public/pdf/ locally or to S3-compatible cloud storage when configured
+// (see utils/storage.js — required for Vercel/serverless deployments,
+// where local disk writes don't persist).
 const upload = multer({
-  storage,
+  storage: multer.memoryStorage(),
   limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
   fileFilter: (req, file, cb) => {
     if (file.mimetype !== "application/pdf") {

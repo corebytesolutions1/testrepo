@@ -57,6 +57,18 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`OWPL website running at http://localhost:${PORT}`);
-});
+// Only bind a real port when run directly (e.g. `node server.js`, or on a
+// normal host like Render/Railway/a VPS). On Vercel, the platform imports
+// this file as a serverless function and calls the exported `app` itself —
+// it does NOT run app.listen(). Without this guard, and without the
+// module.exports line + vercel.json below, Vercel has no way to route
+// requests like /admin/notices to this Express app at all, which is why
+// pages "worked" inconsistently — only routes Vercel happened to expose
+// were reachable.
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`OWPL website running at http://localhost:${PORT}`);
+  });
+}
+
+module.exports = app;
