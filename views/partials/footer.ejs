@@ -3,18 +3,17 @@
 
     <div>
       <div class="flex items-center gap-2 mb-4">
-        <div class="w-9 h-9 rounded bg-accent flex items-center justify-center font-heading font-extrabold text-white">O</div>
-        <span class="font-heading font-bold text-white text-lg">OWPL</span>
+                <span class="font-heading font-bold text-white text-lg">OWPL</span>
       </div>
       <p class="text-sm leading-relaxed text-white/60">
         <%= site.companyName %> operates <%= site.cfsName %> — North India's first private Container Freight Station, serving EXIM trade since <%= site.established %>.
       </p>
-      <div class="flex gap-3 mt-5">
+      <!--<div class="flex gap-3 mt-5">
         <a href="<%= site.social.linkedin %>" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-accent transition"><i data-lucide="linkedin" class="w-4 h-4"></i></a>
         <a href="<%= site.social.facebook %>" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-accent transition"><i data-lucide="facebook" class="w-4 h-4"></i></a>
         <a href="<%= site.social.twitter %>" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-accent transition"><i data-lucide="twitter" class="w-4 h-4"></i></a>
         <a href="<%= site.social.youtube %>" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-accent transition"><i data-lucide="youtube" class="w-4 h-4"></i></a>
-      </div>
+      </div>-->
     </div>
 
     <div>
@@ -45,7 +44,7 @@
       <ul class="space-y-3 text-sm">
         <li class="flex gap-2"><i data-lucide="map-pin" class="w-4 h-4 mt-0.5 text-accent shrink-0"></i><span><%= site.address.line1 %>, <%= site.address.city %>, <%= site.address.state %>, <%= site.address.country %></span></li>
         <li class="flex gap-2"><i data-lucide="mail" class="w-4 h-4 mt-0.5 text-accent shrink-0"></i><a href="mailto:<%= site.email %>" class="hover:text-accent transition"><%= site.email %></a></li>
-        <li class="flex gap-2"><i data-lucide="phone" class="w-4 h-4 mt-0.5 text-accent shrink-0"></i><span><%= site.phonePlaceholder %></span></li>
+        <li class="flex gap-2"><i data-lucide="phone" class="w-4 h-4 mt-0.5 text-accent shrink-0"></i><span>+91 161 2677599</span></li>
         <li class="flex gap-2"><i data-lucide="clock" class="w-4 h-4 mt-0.5 text-accent shrink-0"></i><span>Mon – Sat: 9:00 AM – 6:00 PM</span></li>
       </ul>
     </div>

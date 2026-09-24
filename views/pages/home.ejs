@@ -50,22 +50,22 @@
     <div id="container-stack" class="relative h-[420px]">
       <div class="container-drop absolute inset-x-0 top-0" data-stack-index="0" data-label="WAREHOUSE" data-color="bg-accent">
         <div class="container-box bg-accent">
-          <span>WAREHOUSE</span>
+          <span>Transport</span>
         </div>
       </div>
       <div class="container-drop absolute inset-x-0 top-0" data-stack-index="1" data-label="CFS-OWPL" data-color="bg-navy">
         <div class="container-box bg-navy border-2 border-white/10">
-          <span>CFS-OWPL</span>
+          <span>Godowns for Rent</span>
         </div>
       </div>
       <div class="container-drop absolute inset-x-0 top-0" data-stack-index="2" data-label="CARGO" data-color="bg-steel">
         <div class="container-box bg-steel">
-          <span>CARGO</span>
+          <span>Public Bonded Warehouse</span>
         </div>
       </div>
       <div class="container-drop absolute inset-x-0 top-0" data-stack-index="3" data-label="EXIM" data-color="bg-accent">
         <div class="container-box bg-accent">
-          <span>EXIM</span>
+          <span>Container Freight Station</span>
         </div>
       </div>
     </div>
@@ -207,15 +207,7 @@
 <!-- MAP + CTA -->
 <section class="py-24 px-5 lg:px-8 bg-white">
   <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-10 items-stretch">
-    <div data-aos="fade-right" class="rounded-2xl overflow-hidden border border-black/10 min-h-[320px] bg-[#e9edf1] flex items-center justify-center text-steel text-sm">
-      <!-- Google Map Placeholder: replace src with a live embed URL -->
-      <div class="text-center p-8">
-        <i data-lucide="map" class="w-10 h-10 mx-auto mb-3 text-accent"></i>
-        Google Map Embed Placeholder<br>
-        <%= site.address.line1 %>, <%= site.address.city %>, <%= site.address.state %>
-      </div>
-    </div>
-    <div data-aos="fade-left" class="rounded-2xl bg-navy p-10 text-white flex flex-col justify-center">
+        <div data-aos="fade-left" class="rounded-2xl bg-navy p-10 text-white flex flex-col justify-center">
       <h3 class="font-heading font-bold text-3xl mb-4">Ready to Move Your Cargo?</h3>
       <p class="text-white/60 mb-8">Get in touch with our team for CFS booking, warehousing enquiries, or logistics support.</p>
       <a href="/contact-us" class="inline-flex items-center justify-center gap-2 bg-accent hover:bg-accent/90 text-white font-semibold px-7 py-3.5 rounded-md transition w-fit">

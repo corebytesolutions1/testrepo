@@ -1,8 +1,14 @@
-<header id="site-header" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 <%= active === 'home' ? 'bg-transparent' : 'bg-navy' %>">
+<header id="site-header" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 bg-navy">
   <div class="max-w-7xl mx-auto px-5 lg:px-8 flex items-center justify-between h-20">
 
     <a href="/" class="flex items-center gap-2">
-      <div class="w-10 h-10 rounded bg-accent flex items-center justify-center font-heading font-extrabold text-white">O</div>
+      <div class="w-10 h-10 rounded bg-navy overflow-hidden flex items-center justify-center">
+          <img
+            src="/images/owpl-logo.png"
+            alt="OWPL Logo"
+            class="w-full h-full object-contain"
+          >
+        </div>
       <div class="leading-tight">
         <div class="font-heading font-bold text-white text-lg tracking-wide">OWPL</div>
         <div class="text-[10px] text-white/60 tracking-[0.2em] uppercase">CFS &middot; Ludhiana</div>
